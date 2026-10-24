@@ -1,268 +1,857 @@
-
 <!DOCTYPE html>
-<html lang="ps" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>د محصلینو د نمرو سیستم</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f0f4f8;
-      color: #203047;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Marks Management System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f0ff, #f4f7fb);
+    color: #1e293b;
+    padding: 25px 12px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.header {
+    background: linear-gradient(135deg, #102a56, #1769aa);
+    color: white;
+    padding: 30px 20px;
+    border-radius: 18px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px #102a5625;
+}
+
+.header h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #dbeafe;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 20px #1e293b12;
+}
+
+.card h2 {
+    color: #12376a;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-size: 15px;
+    outline: none;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: #1685d1;
+    box-shadow: 0 0 0 3px #1685d120;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.subject-title {
+    margin: 24px 0 15px;
+    color: #1769aa;
+    font-size: 18px;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.primary {
+    background: #1769aa;
+    color: white;
+}
+
+.secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.success {
+    background: #07865c;
+    color: white;
+}
+
+.danger {
+    background: #dc3545;
+    color: white;
+}
+
+.warning {
+    background: #f2b705;
+    color: #172033;
+}
+
+.message {
+    display: none;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.message.success-message {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.summary-box {
+    padding: 20px;
+    border-radius: 13px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    text-align: center;
+}
+
+.summary-box h3 {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.summary-box p {
+    font-size: 27px;
+    font-weight: bold;
+    color: #1769aa;
+}
+
+.search-input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-size: 15px;
+    margin-bottom: 17px;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+th, td {
+    padding: 13px 11px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 13px;
+}
+
+th {
+    background: #12376a;
+    color: white;
+}
+
+tbody tr:hover {
+    background: #f1f7ff;
+}
+
+.status-pass {
+    color: #07865c;
+    font-weight: bold;
+}
+
+.status-fail {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.action-buttons button {
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.empty {
+    text-align: center;
+    color: #64748b;
+    padding: 25px;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    padding: 20px 10px;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
-    header {
-      background: linear-gradient(135deg, #123c69, #227c9d);
-      color: white;
-      text-align: center;
-      padding: 28px 12px;
+
+    .full-width {
+        grid-column: auto;
     }
-    header h1 { margin: 0 0 10px; }
-    main {
-      max-width: 1000px;
-      margin: 25px auto;
-      padding: 0 14px;
+
+    .summary-grid {
+        grid-template-columns: 1fr;
     }
-    .panel {
-      background: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px #00000010;
+
+    .header h1 {
+        font-size: 23px;
     }
-    .fields {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
+
+    .card {
+        padding: 18px;
     }
-    input, button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    input {
-      border: 1px solid #ccd5df;
-      min-width: 0;
-    }
-    button {
-      border: none;
-      cursor: pointer;
-      background: #176b87;
-      color: white;
-      font-weight: bold;
-    }
-    button:hover { background: #104e66; }
-    .search { margin-bottom: 14px; }
-    .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 650px;
-    }
-    th, td {
-      padding: 12px 9px;
-      border-bottom: 1px solid #e0e6ed;
-      text-align: center;
-    }
-    th { background: #e8f3f7; }
-    .delete { background: #b42332; }
-    .delete:hover { background: #861b26; }
-    .note { color: #526477; font-size: 14px; line-height: 1.8; }
-    footer {
-      background: #123c69;
-      color: white;
-      text-align: center;
-      padding: 22px 10px;
-      margin-top: 30px;
-    }
-    footer strong { color: #ffe082; }
-  </style>
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>د محصلینو د نمرو ثبتولو سیستم</h1>
-    <p>د محصلینو د نمرو ثبت، خوندي کول او لټون</p>
-  </header>
+<div class="container">
 
-  <main>
-    <section class="panel">
-      <h2>د نوي محصل ثبتول</h2>
-      <form id="studentForm">
-        <div class="fields">
-          <input id="name" placeholder="د محصل بشپړ نوم" required>
-          <input id="father" placeholder="د پلار نوم" required>
-          <input id="studentId" placeholder="د محصل آی‌ډي" required>
-          <input id="java" type="number" min="0" max="100"
-            placeholder="د جاوا نمرې" required>
-          <input id="math" type="number" min="0" max="100"
-            placeholder="د ریاضي نمرې" required>
-          <input id="computer" type="number" min="0" max="100"
-            placeholder="د کمپیوټر نمرې" required>
+    <header class="header">
+        <h1>Student Marks Management System</h1>
+        <p>Register students, manage marks, and calculate results easily.</p>
+    </header>
+
+    <section class="card">
+        <h2 id="formTitle">Student Registration</h2>
+
+        <div id="message" class="message"></div>
+
+        <form id="studentForm">
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="studentName">Student Name</label>
+                    <input id="studentName" type="text"
+                           placeholder="Enter student name" required>
+                </div>
+
+                <div class="field">
+                    <label for="fatherName">Father Name</label>
+                    <input id="fatherName" type="text"
+                           placeholder="Enter father name" required>
+                </div>
+
+                <div class="field">
+                    <label for="studentId">Student ID</label>
+                    <input id="studentId" type="text"
+                           placeholder="Enter student ID" required>
+                </div>
+
+                <div class="field">
+                    <label for="className">Class / Department</label>
+                    <input id="className" type="text"
+                           placeholder="Enter class or department" required>
+                </div>
+
+            </div>
+
+            <h3 class="subject-title">Subject Marks (Each out of 100)</h3>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="computer">Computer Science</label>
+                    <input id="computer" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field">
+                    <label for="math">Mathematics</label>
+                    <input id="math" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field">
+                    <label for="english">English</label>
+                    <input id="english" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field">
+                    <label for="programming">Programming</label>
+                    <input id="programming" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field">
+                    <label for="networking">Computer Networking</label>
+                    <input id="networking" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field">
+                    <label for="database">Database</label>
+                    <input id="database" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+
+                <div class="field full-width">
+                    <label for="islamic">Islamic Studies</label>
+                    <input id="islamic" type="number" min="0" max="100"
+                           placeholder="0 - 100" required>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="primary" id="submitButton" type="submit">
+                    Register Student
+                </button>
+
+                <button class="secondary" type="reset" id="resetButton">
+                    Clear Form
+                </button>
+
+                <button class="warning" type="button" id="cancelEdit"
+                        style="display:none;">
+                    Cancel Edit
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="summary-grid">
+        <div class="summary-box">
+            <h3>Total Students</h3>
+            <p id="totalStudents">0</p>
         </div>
-        <p><button type="submit">محصل ثبت کړه</button></p>
-      </form>
-      <p class="note">
-        د هر مضمون نمرې باید له ۰ څخه تر ۱۰۰ پورې وي.
-      </p>
+
+        <div class="summary-box">
+            <h3>Passed Students</h3>
+            <p id="passedStudents">0</p>
+        </div>
+
+        <div class="summary-box">
+            <h3>Failed Students</h3>
+            <p id="failedStudents">0</p>
+        </div>
     </section>
 
-    <section class="panel">
-      <h2>د محصلینو لېست</h2>
-      <input id="search" class="search"
-        placeholder="د محصل د نوم، د پلار نوم یا آی‌ډي له مخې لټون...">
+    <section class="card">
+        <h2>Student Records</h2>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>نوم</th>
-              <th>د پلار نوم</th>
-              <th>آی‌ډي</th>
-              <th>جاوا</th>
-              <th>ریاضي</th>
-              <th>کمپیوټر</th>
-              <th>ټولټال</th>
-              <th>اوسط</th>
-              <th>پایله</th>
-              <th>حذف</th>
-            </tr>
-          </thead>
-          <tbody id="studentList"></tbody>
-        </table>
-      </div>
-      <p id="count">د محصلینو شمېر: ۰</p>
+        <input class="search-input" id="searchInput" type="text"
+               placeholder="Search by student name, ID, or father name...">
+
+        <div class="button-row" style="margin-top:0; margin-bottom:18px;">
+            <button class="success" id="exportButton" type="button">
+                Export to CSV
+            </button>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Father Name</th>
+                        <th>Class / Department</th>
+                        <th>Total / 700</th>
+                        <th>Average</th>
+                        <th>Result</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="studentTable">
+                    <tr>
+                        <td colspan="9" class="empty">
+                            No student records found.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 
-    <section class="panel">
-      <h3>د معلوماتو د خوندي کولو په اړه</h3>
-      <p class="note">
-        معلومات په همدې براوزر کې ساتل کېږي. د براوزر د معلوماتو
-        پاکول یا د بلې وسیلې کارول ممکن معلومات درڅخه ورک کړي.
-        دا لا تر اوسه ګډ انلاین ډیټابېس نه دی.
-      </p>
-    </section>
-  </main>
+    <footer>
+        Student Marks Management System | Data is stored in this browser.
+    </footer>
 
-  <footer>
-    <p>جوړونکی: <strong>حاضرالله ساجد</strong></p>
-    <p>د محصلینو د زده‌کړو لپاره جوړ شوی سیستم</p>
-  </footer>
+</div>
 
-  <script>
-    const storageKey = "pashtoStudentMarks";
-    let students = [];
+<script>
+const form = document.getElementById("studentForm");
+const message = document.getElementById("message");
+const studentTable = document.getElementById("studentTable");
+const searchInput = document.getElementById("searchInput");
 
+const subjectIds = [
+    "computer",
+    "math",
+    "english",
+    "programming",
+    "networking",
+    "database",
+    "islamic"
+];
+
+let students = [];
+
+try {
+    const savedStudents = localStorage.getItem("studentMarksRecords");
+    students = savedStudents ? JSON.parse(savedStudents) : [];
+
+    if (!Array.isArray(students)) {
+        students = [];
+    }
+} catch (error) {
+    students = [];
+}
+
+let editingId = null;
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message " + type;
+
+    window.setTimeout(() => {
+        message.textContent = "";
+        message.className = "message";
+    }, 3500);
+}
+
+function saveStudents() {
     try {
-      students = JSON.parse(localStorage.getItem(storageKey) || "[]");
-      if (!Array.isArray(students)) students = [];
-    } catch {
-      students = [];
-    }
-
-    const form = document.getElementById("studentForm");
-    const list = document.getElementById("studentList");
-    const search = document.getElementById("search");
-    const count = document.getElementById("count");
-
-    function saveStudents() {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(students));
+        localStorage.setItem(
+            "studentMarksRecords",
+            JSON.stringify(students)
+        );
         return true;
-      } catch {
-        alert("معلومات خوندي نه شول. د براوزر د زېرمه ځای وګوره.");
+    } catch (error) {
+        showMessage(
+            "Unable to save data. Browser storage may be full or disabled.",
+            "error"
+        );
         return false;
-      }
     }
+}
 
-    function renderStudents() {
-      const query = search.value.trim().toLowerCase();
-      list.replaceChildren();
+function getFormData() {
+    const marks = {};
 
-      const filtered = students.filter(s =>
-        [s.name, s.father, s.studentId].some(value =>
-          value.toLowerCase().includes(query)
-        )
-      );
-
-      filtered.forEach(s => {
-        const row = document.createElement("tr");
-        const total = s.java + s.math + s.computer;
-        const average = total / 3;
-        const result = [s.java, s.math, s.computer].every(n => n >= 40)
-          ? "بریالی" : "ناکام";
-
-        [
-          s.name, s.father, s.studentId,
-          s.java, s.math, s.computer,
-          total, average.toFixed(2), result
-        ].forEach(value => {
-          const cell = document.createElement("td");
-          cell.textContent = value;
-          row.appendChild(cell);
-        });
-
-        const actionCell = document.createElement("td");
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "حذف";
-        deleteButton.className = "delete";
-        deleteButton.type = "button";
-        deleteButton.addEventListener("click", () => {
-          if (confirm("ایا دا محصل له لېست څخه حذف کړې؟")) {
-            students = students.filter(x => x.studentId !== s.studentId);
-            if (saveStudents()) renderStudents();
-          }
-        });
-        actionCell.appendChild(deleteButton);
-        row.appendChild(actionCell);
-        list.appendChild(row);
-      });
-
-      count.textContent = "د ټولو محصلینو شمېر: " + students.length;
-    }
-
-    form.addEventListener("submit", event => {
-      event.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const father = document.getElementById("father").value.trim();
-      const studentId = document.getElementById("studentId").value.trim();
-      const java = Number(document.getElementById("java").value);
-      const math = Number(document.getElementById("math").value);
-      const computer = Number(document.getElementById("computer").value);
-
-      if (!name || !father || !studentId) {
-        alert("مهرباني وکړئ ټول نومونه او آی‌ډي ولیکئ.");
-        return;
-      }
-
-      if ([java, math, computer].some(n =>
-        !Number.isFinite(n) || n < 0 || n > 100
-      )) {
-        alert("نمرې باید له ۰ څخه تر ۱۰۰ پورې وي.");
-        return;
-      }
-
-      if (students.some(s => s.studentId === studentId)) {
-        alert("دا آی‌ډي مخکې ثبت شوی دی.");
-        return;
-      }
-
-      students.push({ name, father, studentId, java, math, computer });
-
-      if (saveStudents()) {
-        form.reset();
-        renderStudents();
-        alert("محصل په بریالیتوب ثبت شو.");
-      } else {
-        students.pop();
-      }
+    subjectIds.forEach(id => {
+        marks[id] = Number(document.getElementById(id).value);
     });
 
-    search.addEventListener("input", renderStudents);
+    const total = subjectIds.reduce((sum, id) => sum + marks[id], 0);
+    const average = total / subjectIds.length;
+    const passed = subjectIds.every(id => marks[id] >= 40);
+
+    return {
+        name: document.getElementById("studentName").value.trim(),
+        father: document.getElementById("fatherName").value.trim(),
+        studentId: document.getElementById("studentId").value.trim(),
+        className: document.getElementById("className").value.trim(),
+        marks,
+        total,
+        average,
+        result: passed ? "Pass" : "Fail"
+    };
+}
+
+function validateData(data) {
+    if (
+        !data.name ||
+        !data.father ||
+        !data.studentId ||
+        !data.className
+    ) {
+        showMessage("Please fill in all student information.", "error");
+        return false;
+    }
+
+    for (const id of subjectIds) {
+        const input = document.getElementById(id);
+        const value = input.value.trim();
+
+        if (value === "" || !Number.isFinite(Number(value))) {
+            showMessage("Please enter marks for all seven subjects.", "error");
+            return false;
+        }
+
+        if (Number(value) < 0 || Number(value) > 100) {
+            showMessage("Each subject mark must be between 0 and 100.", "error");
+            return false;
+        }
+    }
+
+    const duplicate = students.some(student =>
+        student.studentId.toLowerCase() === data.studentId.toLowerCase() &&
+        student.id !== editingId
+    );
+
+    if (duplicate) {
+        showMessage("This Student ID already exists.", "error");
+        return false;
+    }
+
+    return true;
+}
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const data = getFormData();
+
+    if (!validateData(data)) {
+        return;
+    }
+
+    if (editingId !== null) {
+        const index = students.findIndex(student => student.id === editingId);
+
+        if (index === -1) {
+            showMessage("Student record was not found.", "error");
+            return;
+        }
+
+        students[index] = {
+            ...students[index],
+            ...data
+        };
+
+        if (!saveStudents()) return;
+
+        showMessage("Student record updated successfully.", "success-message");
+    } else {
+        const newStudent = {
+            id: Date.now().toString() + Math.random().toString(16).slice(2),
+            ...data
+        };
+
+        students.push(newStudent);
+
+        if (!saveStudents()) {
+            students.pop();
+            return;
+        }
+
+        showMessage("Student registered successfully.", "success-message");
+    }
+
+    resetForm();
     renderStudents();
-  </script>
+});
+
+function resetForm() {
+    form.reset();
+    editingId = null;
+
+    document.getElementById("formTitle").textContent = "Student Registration";
+    document.getElementById("submitButton").textContent = "Register Student";
+    document.getElementById("cancelEdit").style.display = "none";
+}
+
+document.getElementById("resetButton").addEventListener("click", function() {
+    resetForm();
+});
+
+document.getElementById("cancelEdit").addEventListener("click", function() {
+    resetForm();
+    showMessage("Editing cancelled.", "success-message");
+});
+
+function renderStudents() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    const filteredStudents = students.filter(student =>
+        student.name.toLowerCase().includes(query) ||
+        student.father.toLowerCase().includes(query) ||
+        student.studentId.toLowerCase().includes(query) ||
+        student.className.toLowerCase().includes(query)
+    );
+
+    document.getElementById("totalStudents").textContent = students.length;
+
+    document.getElementById("passedStudents").textContent =
+        students.filter(student => student.result === "Pass").length;
+
+    document.getElementById("failedStudents").textContent =
+        students.filter(student => student.result === "Fail").length;
+
+    if (filteredStudents.length === 0) {
+        studentTable.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">No student records found.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    studentTable.innerHTML = filteredStudents.map((student, index) => {
+        const resultClass = student.result === "Pass"
+            ? "status-pass"
+            : "status-fail";
+
+        return `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${escapeHTML(student.studentId)}</td>
+                <td>${escapeHTML(student.name)}</td>
+                <td>${escapeHTML(student.father)}</td>
+                <td>${escapeHTML(student.className)}</td>
+                <td>${student.total}</td>
+                <td>${student.average.toFixed(2)}%</td>
+                <td class="${resultClass}">${student.result}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="primary"
+                            data-action="edit"
+                            data-id="${student.id}">
+                            Edit
+                        </button>
+
+                        <button class="danger"
+                            data-action="delete"
+                            data-id="${student.id}">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => {
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        };
+
+        return entities[character];
+    });
+}
+
+studentTable.addEventListener("click", function(event) {
+    const button = event.target.closest("button[data-action]");
+
+    if (!button) return;
+
+    const id = button.dataset.id;
+    const action = button.dataset.action;
+
+    if (action === "edit") {
+        editStudent(id);
+    }
+
+    if (action === "delete") {
+        deleteStudent(id);
+    }
+});
+
+function editStudent(id) {
+    const student = students.find(item => item.id === id);
+
+    if (!student) {
+        showMessage("Student record was not found.", "error");
+        return;
+    }
+
+    editingId = id;
+
+    document.getElementById("studentName").value = student.name;
+    document.getElementById("fatherName").value = student.father;
+    document.getElementById("studentId").value = student.studentId;
+    document.getElementById("className").value = student.className;
+
+    subjectIds.forEach(subject => {
+        document.getElementById(subject).value = student.marks[subject];
+    });
+
+    document.getElementById("formTitle").textContent = "Edit Student Record";
+    document.getElementById("submitButton").textContent = "Update Student";
+    document.getElementById("cancelEdit").style.display = "inline-block";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function deleteStudent(id) {
+    const student = students.find(item => item.id === id);
+
+    if (!student) {
+        showMessage("Student record was not found.", "error");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete this student record?")) {
+        return;
+    }
+
+    const previousStudents = students.slice();
+
+    students = students.filter(item => item.id !== id);
+
+    if (!saveStudents()) {
+        students = previousStudents;
+        return;
+    }
+
+    if (editingId === id) {
+        resetForm();
+    }
+
+    renderStudents();
+    showMessage("Student record deleted successfully.", "success-message");
+}
+
+searchInput.addEventListener("input", renderStudents);
+
+document.getElementById("exportButton").addEventListener("click", function() {
+    if (students.length === 0) {
+        showMessage("There are no student records to export.", "error");
+        return;
+    }
+
+    const headers = [
+        "Student ID",
+        "Student Name",
+        "Father Name",
+        "Class / Department",
+        "Computer Science",
+        "Mathematics",
+        "English",
+        "Programming",
+        "Computer Networking",
+        "Database",
+        "Islamic Studies",
+        "Total",
+        "Average",
+        "Result"
+    ];
+
+    const rows = students.map(student => [
+        student.studentId,
+        student.name,
+        student.father,
+        student.className,
+        ...subjectIds.map(subject => student.marks[subject]),
+        student.total,
+        student.average.toFixed(2),
+        student.result
+    ]);
+
+    function csvCell(value) {
+        let text = String(value ?? "");
+
+        if (/^[=+\-@]/.test(text)) {
+            text = "'" + text;
+        }
+
+        return '"' + text.replace(/"/g, '""') + '"';
+    }
+
+    const csvContent = [headers, ...rows]
+        .map(row => row.map(csvCell).join(","))
+        .join("\r\n");
+
+    const blob = new Blob(["\uFEFF" + csvContent], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "student-marks-records.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    showMessage("Student records exported successfully.", "success-message");
+});
+
+renderStudents();
+</script>
 </body>
 </html>
