@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <title></title>
+    <head>
+<body>
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Marks Portal</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f6ff;color:#172554}
+header{background:linear-gradient(110deg,#1674ed,#7844ed);color:white;padding:25px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+header h1{margin:0;font-size:27px}
+header p{margin:8px 0 0}
+nav a{color:white;text-decoration:none;margin:10px;font-weight:bold}
+main{max-width:1200px;margin:28px auto;padding:0 18px}
+.hero{background:#e2efff;padding:25px;border-radius:14px;margin-bottom:22px}
+.hero h2{color:#1262c7;margin-top:0}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px #cbd5e1;margin-bottom:22px}
+.card h2{margin:0;padding:17px;background:#4385f5;color:white;font-size:21px}
+.result h2{background:#18a765}
+.content{padding:22px}
+label{display:block;font-weight:bold;margin:14px 0 8px}
+input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
+button{width:100%;padding:14px;margin-top:22px;background:#18aa63;color:white;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+button:hover{background:#12834b}
+.resultbox{text-align:center}
+.avatar{font-size:45px}
+.status{display:inline-block;padding:9px 28px;border-radius:30px;background:#d1fae5;color:#078044;font-weight:bold;margin:8px}
+.line{display:flex;justify-content:space-between;padding:12px;border:1px solid #e2e8f0;background:#f8fbff}
+.line b{color:#1674ed}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:#eef2ff;color:#334155}
+td,th{padding:12px;text-align:center;border-bottom:1px solid #e2e8f0}
+.pass{color:#078044;font-weight:bold}
+.fail{color:#dc2626;font-weight:bold}
+footer{text-align:center;padding:22px;background:#e8edff;color:#64748b}
+@media(max-width:750px){.columns{grid-template-columns:1fr}header{gap:18px}table{font-size:12px}td,th{padding:8px}.hero h2{font-size:20px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🎓 Student Marks Portal</h1>
+    <p>Manage Student Marks Easily</p>
+  </div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#students">Students</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>📘 Student Marks Management System</h2>
+    <p>Enter student details and calculate total, average and result.</p>
+    <p><i>“Better Education, Brighter Future”</i></p>
+  </section>
+
+  <div class="columns">
+    <section class="card">
+      <h2>✏️ Enter Student Marks</h2>
+      <div class="content">
+        <form id="marksForm">
+          <label for="name">Student Name</label>
+          <input id="name" placeholder="Enter student name" required>
+
+          <label for="java">Java Marks</label>
+          <input id="java" type="number" min="0" max="100" placeholder="0 - 100" required>
+
+          <label for="math">Math Marks</label>
+          <input id="math" type="number" min="0" max="100" placeholder="0 - 100" required>
+
+          <label for="computer">Computer Marks</label>
+          <input id="computer" type="number" min="0" max="100" placeholder="0 - 100" required>
+
+          <button type="submit">✓ Calculate Result</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="card result">
+      <h2>🏆 Student Result</h2>
+      <div class="content resultbox">
+        <div class="avatar">👨‍🎓</div>
+        <h2 id="resultName" style="background:white;color:#172554;padding:8px">Your Name</h2>
+        <span class="status" id="status">Waiting for marks</span>
+        <div class="line"><span>Java Marks</span><b id="rJava">0</b></div>
+        <div class="line"><span>Math Marks</span><b id="rMath">0</b></div>
+        <div class="line"><span>Computer Marks</span><b id="rComputer">0</b></div>
+        <div class="line"><strong>Total Marks</strong><b id="total">0 / 300</b></div>
+        <div class="line"><strong>Average</strong><b id="average">0.00%</b></div>
+        <p id="message">Enter marks to see your result.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" id="students">
+    <h2>👥 All Students</h2>
+    <div class="content" style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Name</th><th>Java</th><th>Math</th>
+            <th>Computer</th><th>Total</th><th>Average</th><th>Result</th>
+          </tr>
+        </thead>
+        <tbody id="studentRows">
+          <tr><td colspan="8">No students added yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer id="about">© 2026 Student Marks Portal | Simple • Fast • Reliable</footer>
+
+<script>
+const form = document.getElementById("marksForm");
+const students = [];
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const java = Number(document.getElementById("java").value);
+  const math = Number(document.getElementById("math").value);
+  const computer = Number(document.getElementById("computer").value);
+
+  if (!name || [java, math, computer].some(
+    mark => !Number.isFinite(mark) || mark < 0 || mark > 100
+  )) {
+    alert("Please enter a name and marks between 0 and 100.");
+    return;
+  }
+
+  const total = java + math + computer;
+  const average = total / 3;
+  const passed = average >= 50;
+
+  document.getElementById("resultName").textContent = name;
+  document.getElementById("rJava").textContent = java;
+  document.getElementById("rMath").textContent = math;
+  document.getElementById("rComputer").textContent = computer;
+  document.getElementById("total").textContent = total + " / 300";
+  document.getElementById("average").textContent = average.toFixed(2) + "%";
+
+  const status = document.getElementById("status");
+  status.textContent = passed ? "Passed" : "Failed";
+  status.style.background = passed ? "#d1fae5" : "#fee2e2";
+  status.style.color = passed ? "#078044" : "#dc2626";
+
+  document.getElementById("message").textContent =
+    passed ? "🎉 Congratulations! You have passed." :
+    "Keep studying. You can improve your result!";
+
+  students.push({name, java, math, computer, total, average, passed});
+  renderStudents();
+  form.reset();
+});
+
+function renderStudents() {
+  const rows = document.getElementById("studentRows");
+  rows.replaceChildren();
+
+  students.forEach((s, index) => {
+    const tr = document.createElement("tr");
+    const values = [
+      index + 1, s.name, s.java, s.math, s.computer,
+      s.total, s.average.toFixed(2)
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    const resultCell = document.createElement("td");
+    resultCell.textContent = s.passed ? "Passed" : "Failed";
+    resultCell.className = s.passed ? "pass" : "fail";
+    tr.appendChild(resultCell);
+    rows.appendChild(tr);
+  });
+}
+</script>
+
+</body>
+</html>
+
+   
+</body>
+    </head>
+</html>
