@@ -1,776 +1,1747 @@
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ps" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Marks Management System</title>
+<title>د Java بشپړ درسي کتاب | حاضرالله ساجد</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root{
+  --bg:#f3f6fc;
+  --panel:#ffffff;
+  --text:#202b3c;
+  --muted:#64748b;
+  --primary:#2457d6;
+  --primary2:#163c9c;
+  --border:#dce4f0;
+  --code:#101827;
+  --green:#dff8e8;
+  --shadow:0 5px 22px #14213d0c;
 }
-
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #e8f0ff, #f4f7fb);
-    color: #1e293b;
-    padding: 25px 12px;
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;
+  line-height:2;font-size:16px
 }
-
-.container {
-    max-width: 1100px;
-    margin: auto;
+header{
+  background:linear-gradient(125deg,#142b58,#2457d6);
+  color:white;padding:27px 22px;text-align:center
 }
-
-.header {
-    background: linear-gradient(135deg, #102a56, #1769aa);
-    color: white;
-    padding: 30px 20px;
-    border-radius: 18px;
-    text-align: center;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 25px #102a5625;
+header h1{margin:0;font-size:30px}
+header p{margin:7px 0;color:#e2eaff}
+.creator{font-size:14px}
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px;max-width:1500px;margin:20px auto;padding:0 18px}
+.sidebar,.content{background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+.sidebar{padding:17px;height:calc(100vh - 40px);position:sticky;top:20px;overflow:auto}
+.sidebar h2{font-size:19px;margin:0 0 12px}
+#search{width:100%;padding:12px;border:1px solid var(--border);border-radius:9px;font:inherit;margin-bottom:12px}
+.navitem{
+ display:block;width:100%;text-align:right;background:white;border:0;
+ border-radius:8px;padding:9px 11px;margin:3px 0;cursor:pointer;
+ font:inherit;color:var(--text);font-size:14px
 }
-
-.header h1 {
-    font-size: 30px;
-    margin-bottom: 10px;
+.navitem:hover,.navitem.active{background:#e8efff;color:var(--primary);font-weight:bold}
+.content{padding:clamp(17px,3vw,38px);min-width:0}
+.eyebrow{color:var(--primary);font-weight:bold;font-size:14px}
+#lessonTitle{font-size:30px;line-height:1.6;margin:4px 0 15px}
+.intro{font-size:18px;color:#475569}
+h2.section-title{font-size:23px;border-right:5px solid var(--primary);padding-right:12px;margin-top:30px}
+h3{font-size:19px;margin-bottom:5px}
+p{margin:8px 0}
+ul,ol{padding-right:28px}
+li{margin:5px 0}
+.note{background:#edf4ff;border-right:4px solid var(--primary);padding:13px 16px;border-radius:8px;margin:15px 0}
+.warning{background:#fff5df;border-right:4px solid #e8a326;padding:13px 16px;border-radius:8px;margin:15px 0}
+.example{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:15px 0 22px}
+.example-head{background:#edf2fa;padding:8px 13px;font-weight:bold}
+pre{
+ direction:ltr;text-align:left;white-space:pre;overflow-x:auto;
+ background:var(--code);color:#e5edf9;padding:17px;margin:0;
+ font:14px/1.8 Consolas,"Courier New",monospace
 }
-
-.header p {
-    color: #dbeafe;
-}
-
-.creator {
-    color: #67e8f9 !important;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 14px;
-    letter-spacing: 1px;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    margin-bottom: 22px;
-    box-shadow: 0 5px 20px #1e293b12;
-}
-
-.card h2 {
-    color: #12376a;
-    margin-bottom: 20px;
-    font-size: 22px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-}
-
-.field label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-    font-size: 14px;
-}
-
-.field input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 9px;
-    font-size: 15px;
-    outline: none;
-}
-
-.field input:focus {
-    border-color: #1685d1;
-    box-shadow: 0 0 0 3px #1685d120;
-}
-
-.full-width {
-    grid-column: 1 / -1;
-}
-
-.subject-title {
-    margin: 24px 0 15px;
-    color: #1769aa;
-    font-size: 18px;
-}
-
-.button-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 22px;
-}
-
-button {
-    border: none;
-    padding: 12px 18px;
-    border-radius: 9px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-button:hover {
-    transform: translateY(-1px);
-    opacity: 0.9;
-}
-
-.primary {
-    background: #1769aa;
-    color: white;
-}
-
-.secondary {
-    background: #e2e8f0;
-    color: #1e293b;
-}
-
-.success {
-    background: #07865c;
-    color: white;
-}
-
-.danger {
-    background: #dc3545;
-    color: white;
-}
-
-.warning {
-    background: #f2b705;
-    color: #172033;
-}
-
-.message {
-    display: none;
-    padding: 13px;
-    border-radius: 8px;
-    margin-bottom: 18px;
-}
-
-.message.error {
-    display: block;
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.message.success-message {
-    display: block;
-    background: #dcfce7;
-    color: #166534;
-}
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 15px;
-    margin-bottom: 22px;
-}
-
-.summary-box {
-    padding: 20px;
-    border-radius: 13px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
-    text-align: center;
-}
-
-.summary-box h3 {
-    color: #475569;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.summary-box p {
-    font-size: 27px;
-    font-weight: bold;
-    color: #1769aa;
-}
-
-.search-input {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #cbd5e1;
-    border-radius: 9px;
-    font-size: 15px;
-    margin-bottom: 17px;
-}
-
-.table-wrap {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 850px;
-}
-
-th, td {
-    padding: 13px 11px;
-    text-align: center;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 13px;
-}
-
-th {
-    background: #12376a;
-    color: white;
-}
-
-tbody tr:hover {
-    background: #f1f7ff;
-}
-
-.status-pass {
-    color: #07865c;
-    font-weight: bold;
-}
-
-.status-fail {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-}
-
-.action-buttons button {
-    padding: 8px 10px;
-    font-size: 12px;
-}
-
-.empty {
-    text-align: center;
-    color: #64748b;
-    padding: 25px;
-}
-
-footer {
-    text-align: center;
-    color: #64748b;
-    padding: 20px 10px;
-    font-size: 13px;
-}
-
-@media (max-width: 650px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .full-width {
-        grid-column: auto;
-    }
-
-    .summary-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header h1 {
-        font-size: 23px;
-    }
-
-    .card {
-        padding: 18px;
-    }
+.output{background:#e8f8ee;color:#14532d;padding:12px 16px;direction:ltr;text-align:left;white-space:pre-wrap;font:14px/1.8 Consolas,monospace}
+.output-label{background:#d2f1dc;padding:5px 13px;color:#14532d;font-weight:bold}
+.term{color:var(--primary);font-weight:bold}
+table{border-collapse:collapse;width:100%;margin:15px 0;background:white}
+th,td{border:1px solid var(--border);padding:9px;text-align:right;vertical-align:top}
+th{background:#edf2fa}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:30px;border-top:1px solid var(--border);padding-top:18px}
+button.move{border:0;border-radius:9px;padding:10px 17px;background:var(--primary);color:white;font:inherit;cursor:pointer}
+button.move:disabled{opacity:.4;cursor:not-allowed}
+.progress{height:7px;background:#e1e8f3;border-radius:10px;overflow:hidden;margin:12px 0}
+#progressFill{height:100%;width:0;background:#2e68e8;transition:width .2s}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+.ltr{direction:ltr;display:inline-block;font-family:Consolas,monospace}
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr;padding:0 9px}
+ .sidebar{position:static;height:auto;max-height:350px}
+ header h1{font-size:24px}
+ #lessonTitle{font-size:25px}
+ .content{padding:17px}
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+<header>
+  <h1>د Java پروګرام‌لیکنې درسي کتاب</h1>
+  <p>له بنسټیزو مفاهیمو څخه تر پرمختللو موضوعاتو پورې</p>
+  <div class="creator">چمتو کوونکی: حاضرالله ساجد</div>
+  <div class="creator">استاد: محمد زمان ځاځی</div>
+</header>
 
-    <header class="header">
-        <p class="creator">Created by Hazirullah Sajid</p>
-        <h1>Student Marks Management System</h1>
-        <p>Register students, manage marks, and calculate results easily.</p>
-    </header>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>د کتاب فهرست</h2>
+    <input id="search" type="search" placeholder="موضوع ولټوه..." aria-label="د موضوع لټون">
+    <div class="progress"><div id="progressFill"></div></div>
+    <div id="nav"></div>
+  </aside>
 
-    <section class="card">
-        <h2 id="formTitle">Student Registration</h2>
-        <div id="message" class="message"></div>
-
-        <form id="studentForm">
-            <div class="form-grid">
-                <div class="field">
-                    <label for="studentName">Student Name</label>
-                    <input id="studentName" type="text"
-                           placeholder="Enter student name" required>
-                </div>
-
-                <div class="field">
-                    <label for="fatherName">Father Name</label>
-                    <input id="fatherName" type="text"
-                           placeholder="Enter father name" required>
-                </div>
-
-                <div class="field">
-                    <label for="studentId">Student ID</label>
-                    <input id="studentId" type="text"
-                           placeholder="Enter student ID" required>
-                </div>
-
-                <div class="field">
-                    <label for="className">Class / Department</label>
-                    <input id="className" type="text"
-                           placeholder="Enter class or department" required>
-                </div>
-            </div>
-
-            <h3 class="subject-title">Subject Marks (Each out of 100)</h3>
-
-            <div class="form-grid">
-                <div class="field">
-                    <label for="computer">Computer Science</label>
-                    <input id="computer" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field">
-                    <label for="math">Mathematics</label>
-                    <input id="math" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field">
-                    <label for="english">English</label>
-                    <input id="english" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field">
-                    <label for="programming">Programming</label>
-                    <input id="programming" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field">
-                    <label for="networking">Computer Networking</label>
-                    <input id="networking" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field">
-                    <label for="database">Database</label>
-                    <input id="database" type="number" min="0" max="100" required>
-                </div>
-
-                <div class="field full-width">
-                    <label for="islamic">Islamic Studies</label>
-                    <input id="islamic" type="number" min="0" max="100" required>
-                </div>
-            </div>
-
-            <div class="button-row">
-                <button class="primary" id="submitButton" type="submit">
-                    Register Student
-                </button>
-                <button class="secondary" type="reset" id="resetButton">
-                    Clear Form
-                </button>
-                <button class="warning" type="button" id="cancelEdit"
-                        style="display:none;">
-                    Cancel Edit
-                </button>
-            </div>
-        </form>
-    </section>
-
-    <section class="summary-grid">
-        <div class="summary-box">
-            <h3>Total Students</h3>
-            <p id="totalStudents">0</p>
-        </div>
-        <div class="summary-box">
-            <h3>Passed Students</h3>
-            <p id="passedStudents">0</p>
-        </div>
-        <div class="summary-box">
-            <h3>Failed Students</h3>
-            <p id="failedStudents">0</p>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2>Student Records</h2>
-
-        <input class="search-input" id="searchInput" type="text"
-               placeholder="Search by student name, ID, or father name...">
-
-        <div class="button-row" style="margin-top:0; margin-bottom:18px;">
-            <button class="success" id="exportButton" type="button">
-                Export to CSV
-            </button>
-        </div>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Student ID</th>
-                        <th>Student Name</th>
-                        <th>Father Name</th>
-                        <th>Class / Department</th>
-                        <th>Total / 700</th>
-                        <th>Average</th>
-                        <th>Result</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="studentTable">
-                    <tr>
-                        <td colspan="9" class="empty">No student records found.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <footer>
-        Student Marks Management System
-        <br>
-        Created by Hazirullah Sajid
-        <br><br>
-        Data is stored in this browser.
-    </footer>
-
+  <main class="content">
+    <div class="eyebrow" id="chapterNumber"></div>
+    <h1 id="lessonTitle"></h1>
+    <div id="lesson"></div>
+    <div class="actions">
+      <button class="move" id="prev">← مخکینی درس</button>
+      <button class="move" id="next">راتلونکی درس →</button>
+    </div>
+  </main>
 </div>
 
+<footer>د Java زده‌کړه — حاضرالله ساجد</footer>
+
 <script>
-const form = document.getElementById("studentForm");
-const message = document.getElementById("message");
-const studentTable = document.getElementById("studentTable");
-const searchInput = document.getElementById("searchInput");
+const lessons = [
+{
+title:"۱ ـ Java څه شی دی؟",
+intro:"Java یوه عمومي موخې لرونکې، د Object-Oriented Programming ملاتړ کوونکې او د بېلابېلو عملیاتي سیستمونو لپاره کارېدونکې پروګرام‌لیکنې ژبه ده.",
+sections:[
+["د Java تعریف",
+`Java یوه Programming Language ده چې د پروګرامونو، ویب‌خدمتونو، د شرکتونو د سیسټمونو او نورو سافټویرونو په جوړولو کې کارول کېږي. د Java پروګرام عموماً لومړی په Bytecode بدلېږي او بیا یې Java Virtual Machine اجرا کوي. له همدې امله، د مناسب JVM په شتون کې یو پروګرام په بېلابېلو عملیاتي سیستمونو کې چلېدای شي.`],
+["د Java مهمې ځانګړنې",
+`• Object-Oriented: د Class او Object پر بنسټ پروګرام جوړول ملاتړ کوي.
+• Platform Independent: د مناسب JVM په لرلو سره Bytecode په بېلابېلو سیستمونو کې اجرا کېدای شي.
+• Strongly Typed: د متغیرونو ډولونه ټاکل کېږي.
+• Automatic Memory Management: د Garbage Collector په مرسته د ډېرو نه‌کارېدونکو Objectونو حافظه بېرته ازادېږي.
+• Multithreading: په یوه پروګرام کې د څو Threadونو کار ملاتړ کوي.
+• Exception Handling: د تېروتنو د اداره کولو جوړښتونه لري.`],
+["JDK، JRE او JVM",
+`JVM (Java Virtual Machine) د Bytecode د اجرا چاپېریال دی.
+JRE (Java Runtime Environment) په دودیز تعریف کې د Java پروګرامونو د اجرا لپاره JVM او اړوند کتابتونونه رانغاړي.
+JDK (Java Development Kit) د پروګرام جوړولو وسایل لري، لکه Compiler او نور پراختیايي وسایل. په نويو Java نسخو کې د JRE جلا وېش تل نه وي، خو اصطلاحات لا هم د زده‌کړې لپاره مهم دي.`],
+["لومړی پروګرام",`په Java کې د پروګرام د پیل لپاره معمولاً main Method کارول کېږي. د فایل نوم باید د public Class له نوم سره برابر وي.` ,
+`public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello Java");
+    }
+}`,
+`Hello Java`],
+["د لومړي پروګرام تشریح",
+`public د Class د لاسرسي کچه ښيي.
+class د Class د جوړولو کلمه ده.
+Main د Class نوم دی.
+main د پروګرام د پیل Method دی.
+String[] args د Command-Line Arguments لپاره پارامېټر دی.
+System.out.println متن چاپوي او وروسته نوې کرښې ته ځي.
+په Java کې د ډېرو Statementونو په پای کې Semicolon (;) لیکل کېږي.`],
+["Compile او Run",
+`که فایل Main.java وي، په Terminal کې دا امرونه کارول کېدای شي:
+لومړی Compile:
+javac Main.java
+بیا Run:
+java Main
+د Compile پر مهال Compiler د Java سرچینه په Bytecode بدلوي. وروسته JVM د جوړ شوي Class فایل کوډ اجرا کوي.`]
+]},
+{
+title:"۲ ـ Variables او Constants",
+intro:"Variable د معلوماتو د ساتلو لپاره نومول شوی ځای دی. Constant داسې ارزښت دی چې له ټاکلو وروسته یې د بیا بدلېدو اجازه نه ورکول کېږي.",
+sections:[
+["Variable څه شی دی؟",
+`Variable نوم، Data Type او ارزښت لري. د Variable نوم باید د Java د نوم‌اېښودنې قواعد مراعات کړي. د متغیرونو نومونه عموماً په کوچني توري پیلېږي، لکه age، studentName او totalMarks.`],
+["Declaration، Initialization او Assignment",
+`Declaration د متغیر اعلان دی، یعنې د ډول او نوم ټاکل.
+Initialization هغه لومړنی ارزښت ورکول دي.
+Assignment متغیر ته ارزښت ورکول یا د هغه د ارزښت بدلول دي.` ,
+`int age;
+age = 20;
+int marks = 90;
+marks = 95;
+System.out.println(age);
+System.out.println(marks);`,
+`20
+95`],
+["د متغیرونو ډولونه",
+`Local Variable د Method یا Block دننه اعلانېږي.
+Instance Variable د Class دننه، خو د Methodونو څخه بهر وي؛ هر Object یې خپل Instance ارزښت لري.
+Static Variable د Class پورې تړلی وي او د Class د ټولو Objectونو ترمنځ شریک وي.
+د Local Variable لپاره باید د کارولو مخکې ارزښت وټاکل شي. Instance او Static Fields د خپل ډول له مخې Default Value اخلي.` ,
+`class Student {
+    String name;            // Instance Variable
+    static int count = 0;   // Static Variable
 
-const subjectIds = [
-    "computer", "math", "english", "programming",
-    "networking", "database", "islamic"
-];
+    void show() {
+        int age = 20;       // Local Variable
+        System.out.println(name);
+        System.out.println(age);
+    }
+}`,
+`په دې مثال کې show() د age لپاره Local Variable لري. name د هر Student Object پورې تړلی دی او count د Class له ټولو Objectونو سره شریک دی.`],
+["Constants او final",
+`د final کلمه د متغیر د بیا Assignment مخه نیسي. د Constant نومونه اکثره په لویو تورو لیکل کېږي او د کلمو ترمنځ Underscore کارول کېږي.` ,
+`final double PI = 3.14159;
+System.out.println(PI);`,
+`3.14159`,
+`که وروسته PI = 4.0; ولیکل شي، Compiler خطا ورکوي. د final Object Reference په صورت کې Reference نه شي بدلول کېدای، خو د Object داخلي حالت ښايي بدل شي.`],
+["د نوم‌اېښودنې قواعد",
+`د Variable نوم په توري، Underscore (_) یا Dollar Sign ($) پیلېدای شي؛ په عدد نه شي پیلېدای. Space پکې نه شي راتلای. د Java Reserved Keywords لکه class او int د متغیر نومونه نه شي کېدای. Java د لویو او کوچنیو تورو توپیر کوي: age او Age دوه بېل نومونه دي.`]
+]},
+{
+title:"۳ ـ Data Types",
+intro:"Data Type مشخصوي چې متغیر کوم ډول معلومات ساتلی شي. په Java کې Primitive Types او Reference Types شته.",
+sections:[
+["Primitive Data Types",
+`Java اته Primitive Data Types لري: byte، short، int، long، float، double، char او boolean.` ,
+`byte a = 100;
+short b = 30000;
+int age = 20;
+long population = 8000000L;
+float price = 12.5f;
+double average = 89.75;
+char grade = 'A';
+boolean passed = true;
+System.out.println(age);
+System.out.println(grade);
+System.out.println(passed);`,
+`20
+A
+true`],
+["د عددونو ډولونه",
+`byte د 8-bit Signed Integer لپاره دی.
+short د 16-bit Signed Integer لپاره دی.
+int د 32-bit Signed Integer لپاره دی او د عادي صحیح عددونو لپاره ډېر کارول کېږي.
+long د 64-bit Signed Integer لپاره دی؛ د Literal په پای کې L کارول کېږي.
+float د 32-bit Floating-Point عدد لپاره دی او معمولاً f غواړي.
+double د 64-bit Floating-Point عدد لپاره دی او د اعشاري عددونو لپاره عام انتخاب دی.`],
+["char او boolean",
+`char د یوه UTF-16 Code Unit ارزښت ساتي او ارزښت یې په Single Quotes لیکل کېږي، لکه 'A'.
+boolean یوازې true یا false اخلي. په Java کې boolean ته 0 او 1 په مستقیم ډول نه شي ورکول کېدای.`],
+["Reference Types",
+`Reference Types د Objectونو یا Arrayونو Reference ساتي. String، Array، Class، Interface او Enum د Reference Types مثالونه دي. Reference Variable د Object له محتوا سره یو شان شی نه دی؛ دا Object ته اشاره کوي. null د دې معنا لري چې Reference اوس هېڅ Object ته نه اشاره کوي.`],
+["Default Values",
+`د Class Fields لپاره Default Values شته: د عددونو لپاره صفر، boolean لپاره false، char لپاره د صفر Code Unit او Reference Types لپاره null.
+Local Variables اتومات Default Value نه اخلي؛ باید د کارولو مخکې یې ارزښت وټاکل شي.`]
+]},
+{
+title:"۴ ـ Type Casting",
+intro:"Type Casting د یوه Data Type ارزښت بل ډول ته اړول دي. دا په دوو اساسي بڼو وېشل کېږي: Widening او Narrowing.",
+sections:[
+["Widening Casting",
+`Widening معمولاً له کوچني عددي ډول څخه لوی عددي ډول ته بدلون دی او په ډېرو عادي حالاتو کې په اتومات ډول ترسره کېږي. خو د Floating-Point او Integer ترمنځ بدلون کې د دقیقوالي مسئله باید په پام کې ونیول شي.` ,
+`int number = 25;
+double result = number;
+System.out.println(result);`,
+`25.0`],
+["Narrowing Casting",
+`Narrowing له پراخ ډول څخه محدود ډول ته بدلون دی او Explicit Casting غواړي. په دې بدلون کې د معلوماتو ضایع کېدل یا د ارزښت بدلېدل ممکن دي.` ,
+`double price = 19.99;
+int whole = (int) price;
+System.out.println(whole);`,
+`19`,
+`د (int) په کارولو سره د اعشاري برخې پرې کېږي؛ دا د عادي مثبتو عددونو لپاره د نږدې کولو معنا نه لري.`],
+["String او عدد",
+`String د Integer په څېر Primitive Type نه دی، نو د String او عدد ترمنځ بدلون د Casting پر ځای د Parsing یا Conversion له لارې کېږي.` ,
+`String text = "123";
+int value = Integer.parseInt(text);
+System.out.println(value + 7);`,
+`130`,
+`که String د مناسب عدد بڼه ونه لري، parseInt ممکن NumberFormatException رامنځته کړي.`]
+]},
+{
+title:"۵ ـ Operators",
+intro:"Operator د ارزښتونو یا متغیرونو پر سر عملیات ترسره کوي. په Java کې Arithmetic، Assignment، Comparison، Logical، Unary، Bitwise، Shift او Ternary Operators مهم دي.",
+sections:[
+["Arithmetic Operators",
+`+ جمع، - تفریق، * ضرب، / تقسیم او % پاتې شونی محاسبه کوي. که دواړه عددونه Integer وي، د / پایله Integer وي او اعشاري برخه پرې کېږي.` ,
+`int a = 10;
+int b = 3;
+System.out.println(a + b);
+System.out.println(a - b);
+System.out.println(a * b);
+System.out.println(a / b);
+System.out.println(a % b);`,
+`13
+7
+30
+3
+1`],
+["Assignment Operators",
+`= ارزښت ټاکي. +=، -=، *=، /= او %= عملیات ترسره کوي او پایله بېرته متغیر ته ورکوي.` ,
+`int x = 10;
+x += 5;
+x *= 2;
+System.out.println(x);`,
+`30`],
+["Comparison Operators",
+`== د Primitive ارزښتونو د برابرۍ لپاره کارول کېږي؛ != نابرابري، > لویوالی، < کوچنیوالی، >= لوی یا برابر او <= کوچنی یا برابر ښيي. پایله boolean وي. د String د متن د برابرۍ لپاره عموماً equals() وکاروه.` ,
+`int a = 5;
+int b = 8;
+System.out.println(a < b);
+System.out.println(a == b);`,
+`true
+false`],
+["Logical Operators",
+`&& د دواړو شرطونو true کېدل غواړي.
+|| که لږ تر لږه یو شرط true وي، پایله true ده.
+! د boolean ارزښت برعکس کوي.
+&& او || د Short-Circuit چلند لري؛ کله چې پایله له لومړي شرط څخه معلومه شي، دویم شرط ښايي اجرا نه شي.` ,
+`int age = 20;
+boolean hasID = true;
+System.out.println(age >= 18 && hasID);
+System.out.println(age < 18 || hasID);
+System.out.println(!hasID);`,
+`true
+true
+false`],
+["Unary Operators",
+`Unary Operator پر یوه Operand کار کوي. ++ ارزښت زیاتوي او -- یې کموي. ! boolean برعکس کوي، + او - عددي نښه ښيي. په x++ کې د Expression پخوانی ارزښت کارول کېږي؛ په ++x کې زیات شوی ارزښت کارول کېږي.` ,
+`int x = 5;
+System.out.println(x++);
+System.out.println(++x);`,
+`5
+7`],
+["Ternary Operator",
+`Ternary Operator د لنډ شرط لپاره کارول کېږي: condition ? value1 : value2. که شرط true وي، value1 ټاکل کېږي، که نه value2.` ,
+`int age = 17;
+String result = age >= 18 ? "Adult" : "Minor";
+System.out.println(result);`,
+`Minor`],
+["Bitwise او Shift Operators",
+`&، |، ^ او ~ د Integer د Bits پر سر عملیات ترسره کوي. << د Bits د چپ Shift، >> د Sign په ساتلو ښي Shift او >>> د صفر په ډکولو ښي Shift دی. د دې Operators چلند د عدد د Binary بڼې له مخې درک کېږي.` ,
+`System.out.println(5 & 3);
+System.out.println(5 | 3);
+System.out.println(5 ^ 3);
+System.out.println(5 << 1);`,
+`1
+7
+6
+10`,
+`د 5 Binary بڼه 0101 او د 3 بڼه 0011 ده. د & په عملیاتو کې یوازې هغه Bit برابر 1 وي چې دواړه Bits یې 1 وي.`]
+]},
+{
+title:"۶ ـ User Input او Output",
+intro:"Output د پروګرام د پایلو ښودلو ته ویل کېږي؛ Input د کارونکي له خوا د معلوماتو داخلولو ته ویل کېږي.",
+sections:[
+["د Output طریقې",
+`System.out.print() متن چاپوي او په هماغه کرښه کې پاتې کېږي.
+System.out.println() متن چاپوي او وروسته نوې کرښې ته ځي.
+System.out.printf() د Format له مخې معلومات چاپوي.` ,
+`System.out.print("Hello ");
+System.out.println("Java");
+System.out.printf("Age: %d%n", 20);`,
+`Hello Java
+Age: 20`],
+["د Scanner په وسیله Input",
+`Scanner د کارونکي له Keyboard څخه د معلوماتو اخیستلو لپاره عامه وسیله ده. لومړی java.util.Scanner Import کېږي، بیا Scanner Object جوړېږي.` ,
+`import java.util.Scanner;
 
-let students = [];
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter age: ");
+        int age = input.nextInt();
+
+        System.out.println("Your age is " + age);
+        input.close();
+    }
+}`,
+`که کارونکی 20 داخل کړي:
+Enter age: 20
+Your age is 20`],
+["د Scanner مهم Methods",
+`nextInt() صحیح عدد اخلي.
+nextDouble() اعشاري عدد اخلي.
+next() د متن تر لومړي Space پورې برخه اخلي.
+nextLine() د کرښې پاتې متن اخلي.
+nextBoolean() boolean اخلي.
+د nextInt() وروسته nextLine() کارولو پر مهال د پاتې Newline مسئله رامنځته کېدای شي؛ د اړتیا په صورت کې اضافي nextLine() وکاروه.`],
+["د Input د اعتبار ارزونه",
+`د کارونکي Input باید د اړتیا سره سم وکتل شي. د مثال په توګه، د عمر لپاره منفي عدد ښايي د پروګرام له قواعدو سره برابر نه وي. د نامناسب عددي Input لپاره Exception هم رامنځته کېدای شي؛ د Exception Handling فصل یې تشریح کوي.`]
+]},
+{
+title:"۷ ـ if، else او switch",
+intro:"Conditional Statements د پروګرام د پرېکړې لپاره کارول کېږي. پروګرام د شرط د پایلې له مخې بېلابېل کوډونه اجرا کوي.",
+sections:[
+["if Statement",
+`if هغه وخت خپل Block اجرا کوي چې شرط true وي.` ,
+`int marks = 85;
+if (marks >= 50) {
+    System.out.println("Passed");
+}`,
+`Passed`],
+["if-else",
+`که شرط true وي، if اجرا کېږي؛ که false وي، else اجرا کېږي.` ,
+`int marks = 40;
+if (marks >= 50) {
+    System.out.println("Passed");
+} else {
+    System.out.println("Failed");
+}`,
+`Failed`],
+["else-if Ladder",
+`else-if د څو شرطونو د ارزونې لپاره کارول کېږي. لومړی true شرط اجرا کېږي او وروسته نور شرطونه نه ارزول کېږي.` ,
+`int marks = 78;
+if (marks >= 90) {
+    System.out.println("A");
+} else if (marks >= 75) {
+    System.out.println("B");
+} else if (marks >= 50) {
+    System.out.println("C");
+} else {
+    System.out.println("Fail");
+}`,
+`B`],
+["Nested if",
+`Nested if هغه حالت دی چې یو if د بل if دننه وي. دا د څو تړلو شرطونو لپاره کارېدای شي، خو د ډېر Nesting پر ځای د لوستلو وړ جوړښت غوره دی.` ,
+`int age = 20;
+boolean registered = true;
+
+if (age >= 18) {
+    if (registered) {
+        System.out.println("Allowed");
+    }
+}`,
+`Allowed`],
+["switch Statement",
+`switch د یوه Expression ارزښت له بېلابېلو Caseونو سره پرتله کوي. په دودیز switch کې break د راتلونکو Caseونو د نااړینې اجرا مخه نیسي. که break نه وي، Fall-Through پېښېدای شي. د switch ملاتړ د Java نسخې او د Expression د ډول پورې تړلی دی.` ,
+`int day = 2;
+switch (day) {
+    case 1:
+        System.out.println("Monday");
+        break;
+    case 2:
+        System.out.println("Tuesday");
+        break;
+    default:
+        System.out.println("Unknown");
+}`,
+`Tuesday`],
+["د Switch Expression لنډه بڼه",
+`په نویو Java نسخو کې Switch Expression د -> په بڼه هم لیکل کېدای شي. دا د ارزښت بېرته ورکولو لپاره ګټوره ده.` ,
+`int day = 2;
+String name = switch (day) {
+    case 1 -> "Monday";
+    case 2 -> "Tuesday";
+    default -> "Unknown";
+};
+System.out.println(name);`,
+`Tuesday`]
+]},
+{
+title:"۸ ـ Loops",
+intro:"Loop د کوډ د یوې برخې د تکراري اجرا لپاره کارول کېږي. په Java کې for، while، do-while او Enhanced for مهم Loopونه دي.",
+sections:[
+["for Loop",
+`for Loop عموماً درې برخې لري: Initialization، Condition او Update. تر هر تکرار مخکې شرط ارزول کېږي.` ,
+`for (int i = 1; i <= 5; i++) {
+    System.out.println(i);
+}`,
+`1
+2
+3
+4
+5`],
+["while Loop",
+`while Loop تر هغه وخته اجرا کېږي چې شرط true وي. که شرط له پیله false وي، بدن یې هېڅکله نه اجرا کېږي.` ,
+`int i = 1;
+while (i <= 3) {
+    System.out.println(i);
+    i++;
+}`,
+`1
+2
+3`],
+["do-while Loop",
+`do-while لومړی د Loop بدن اجرا کوي او وروسته شرط ارزوي؛ له همدې امله لږ تر لږه یو ځل اجرا کېږي.` ,
+`int i = 1;
+do {
+    System.out.println(i);
+    i++;
+} while (i <= 3);`,
+`1
+2
+3`],
+["Enhanced for Loop",
+`Enhanced for د Array یا Iterable د عناصرو د لوستلو لپاره ساده بڼه ده. کله چې Index ته اړتیا نه وي، دا ډېری وخت د لوستلو وړ وي.` ,
+`int[] numbers = {10, 20, 30};
+for (int number : numbers) {
+    System.out.println(number);
+}`,
+`10
+20
+30`],
+["break او continue",
+`break د Loop اجرا پای ته رسوي.
+continue د روان تکرار پاتې برخه پرېږدي او بل تکرار ته ځي.` ,
+`for (int i = 1; i <= 5; i++) {
+    if (i == 2) {
+        continue;
+    }
+    if (i == 5) {
+        break;
+    }
+    System.out.println(i);
+}`,
+`1
+3
+4`],
+["Nested Loops",
+`Nested Loop هغه Loop دی چې د بل Loop دننه وي. د جدولونو، Patterns او دوه‌بعدي Arrayونو لپاره کارېږي. د داخلي Loop ټول تکرارونه د بهرني Loop له هر تکرار سره ترسره کېږي.` ,
+`for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= 2; j++) {
+        System.out.print("*");
+    }
+    System.out.println();
+}`,
+`**
+**
+**`,
+`د بې‌پایه Loop مخنیوي لپاره وګوره چې شرط په مناسب وخت بدلېږي. د Loop د Update برخه هېرول ښايي Infinite Loop رامنځته کړي.`]
+]},
+{
+title:"۹ ـ Arrays",
+intro:"Array د یوه Data Type د څو ارزښتونو د ساتلو جوړښت دی. د Array اندازه د جوړېدو پر مهال ټاکل کېږي او Index یې له صفر څخه پیلېږي.",
+sections:[
+["د Array اعلان او جوړول",
+`Array د یو ډول څو ارزښتونه ساتي. د Array Length له جوړېدو وروسته نه بدلېږي.` ,
+`int[] marks = new int[3];
+marks[0] = 80;
+marks[1] = 90;
+marks[2] = 75;
+
+System.out.println(marks[0]);
+System.out.println(marks.length);`,
+`80
+3`],
+["Array په یوه کرښه کې",
+`د ارزښتونو له معلومېدو سره Array په لنډه بڼه جوړېدای شي.` ,
+`String[] names = {"Ali", "Ahmad", "Sara"};
+System.out.println(names[1]);`,
+`Ahmad`],
+["Array د Loop په وسیله",
+`Loop د Array د ټولو عناصرو د لوستلو یا محاسبې لپاره کارول کېږي. د Index وروستی ارزښت length - 1 دی.` ,
+`int[] nums = {2, 4, 6};
+int sum = 0;
+
+for (int i = 0; i < nums.length; i++) {
+    sum += nums[i];
+}
+System.out.println(sum);`,
+`12`],
+["Two-Dimensional Array",
+`Two-Dimensional Array د قطارونو او ستونونو په بڼه د معلوماتو ساتلو لپاره کارېږي. په Java کې دا د Arrayونو Array دی او هر قطار یې جلا اندازه هم لرلای شي.` ,
+`int[][] matrix = {
+    {1, 2},
+    {3, 4}
+};
+System.out.println(matrix[1][0]);`,
+`3`],
+["د Array عامې تېروتنې",
+`ArrayIndexOutOfBoundsException هغه وخت رامنځته کېدای شي چې له موجودو Indexونو بهر لاسرسی وشي. که Array درې عناصر ولري، Indexونه یې 0، 1 او 2 دي. null Array ته لاسرسی NullPointerException رامنځته کولای شي.`],
+["Arrays Utility",
+`java.util.Arrays د Arrayونو لپاره ګټور Methods لري، لکه toString()، sort()، equals() او binarySearch(). binarySearch() عموماً پر مرتب شوي Array کارول کېږي.` ,
+`import java.util.Arrays;
+
+int[] numbers = {5, 2, 8};
+Arrays.sort(numbers);
+System.out.println(Arrays.toString(numbers));`,
+`[2, 5, 8]`]
+]},
+{
+title:"۱۰ ـ String",
+intro:"String د متن د ساتلو Class دی. String Immutable دی، یعنې د جوړېدو وروسته یې متن نه بدلېږي؛ عملیات عموماً نوی String تولیدوي.",
+sections:[
+["String جوړول",
+`String په Double Quotes لیکل کېږي. د String ارزښت د + Operator په وسیله له بل String یا د Primitive له ارزښت سره یوځای کېدای شي.` ,
+`String first = "Hello";
+String second = "Java";
+System.out.println(first + " " + second);`,
+`Hello Java`],
+["د String مهم Methods",
+`length() د متن اوږدوالی ورکوي.
+charAt(index) په ټاکلي Index کې Character ورکوي.
+toUpperCase() لوی توري جوړوي.
+toLowerCase() کوچني توري جوړوي.
+contains() ګوري چې متن ټاکلې برخه لري که نه.
+substring() د متن یوه برخه اخلي.
+trim() د دواړو څنډو عادي Space لرې کوي؛ strip() د Unicode White Space لپاره پراخ ملاتړ لري.` ,
+`String text = "Java Programming";
+System.out.println(text.length());
+System.out.println(text.toUpperCase());
+System.out.println(text.contains("Java"));
+System.out.println(text.substring(0, 4));`,
+`16
+JAVA PROGRAMMING
+true
+Java`],
+["String Comparison",
+`== د دوو Referenceونو د هویت پرتله کوي، نه تل د متن د محتوا پرتله. equals() د متن محتوا پرتله کوي. equalsIgnoreCase() د لویو او کوچنیو تورو توپیر له پامه غورځوي.` ,
+`String a = new String("Java");
+String b = new String("Java");
+System.out.println(a == b);
+System.out.println(a.equals(b));
+System.out.println("java".equalsIgnoreCase("JAVA"));`,
+`false
+true
+true`],
+["StringBuilder",
+`کله چې په Loop کې متن ډېر ځله جوړېږي، StringBuilder ګټور دی، ځکه د متن د بدلولو لپاره د هر ځل نوي String جوړولو اړتیا کموي.` ,
+`StringBuilder sb = new StringBuilder();
+sb.append("Hello");
+sb.append(" ");
+sb.append("Java");
+System.out.println(sb.toString());`,
+`Hello Java`]
+]},
+{
+title:"۱۱ ـ Methods",
+intro:"Method د کوډ نومول شوې برخه ده چې یوه دنده ترسره کوي. Methods د کوډ د بیا کارولو، تنظیم او ازموینې لپاره مهم دي.",
+sections:[
+["Method Syntax",
+`Method کې Access Modifier، نور اختیاري Modifiers، Return Type، Method Name، Parameters او Body راتلای شي. د Method نوم عموماً په کوچني توري پیلېږي.` ,
+`static int add(int a, int b) {
+    return a + b;
+}
+
+public static void main(String[] args) {
+    System.out.println(add(3, 4));
+}`,
+`7`],
+["Parameters او Arguments",
+`Parameter هغه متغیر دی چې د Method په تعریف کې لیکل کېږي. Argument هغه حقیقي ارزښت دی چې د Method د غږولو پر مهال ورلېږل کېږي. د Primitive Argument ارزښت کاپي کېږي؛ د Reference لپاره هم Reference Value کاپي کېږي.`],
+["Return Type او void",
+`Return Type ښيي چې Method کوم ډول ارزښت بېرته ورکوي. int، double او String د Return Type مثالونه دي. void معنا دا ده چې Method عادي ارزښت نه بېرته ورکوي. return د Method اجرا پای ته رسولای شي.` ,
+`static String greeting(String name) {
+    return "Hello " + name;
+}
+System.out.println(greeting("Ahmad"));`,
+`Hello Ahmad`],
+["Method Overloading",
+`Method Overloading هغه وخت وي چې په یوه Class کې څو Methods یو نوم ولري، خو د Parameterونو شمېر، ډول یا ترتیب یې توپیر ولري. یوازې د Return Type بدلول د Overloading لپاره بسنه نه کوي.` ,
+`class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    double add(double a, double b) {
+        return a + b;
+    }
+
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}`,
+`د add(2, 3) پایله 5 ده.
+د add(2.5, 1.5) پایله 4.0 ده.
+د add(1, 2, 3) پایله 6 ده.`],
+["Recursion",
+`Recursion هغه وخت دی چې Method خپل ځان بیا غږ کړي. د پای ته رسېدو لپاره Base Case ضروري دی؛ که Base Case سم نه وي، د StackOverflowError خطر شته.` ,
+`static int factorial(int n) {
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+System.out.println(factorial(5));`,
+`120`],
+["varargs او Method Scope",
+`varargs د یوه ډول صفر یا ډېرو Arguments اخیستلو اجازه ورکوي او په Method کې د Array په څېر کارول کېږي. د Method Local Variables له Method څخه بهر نه کارول کېږي.` ,
+`static int sum(int... numbers) {
+    int total = 0;
+    for (int n : numbers) {
+        total += n;
+    }
+    return total;
+}
+System.out.println(sum(1, 2, 3, 4));`,
+`10`]
+]},
+{
+title:"۱۲ ـ OOP، Class او Object",
+intro:"Object-Oriented Programming د پروګرام جوړولو طریقه ده چې د معلوماتو او اړوندو چلندونو د تنظیم لپاره Class او Object کاروي.",
+sections:[
+["Class او Object",
+`Class د Object د جوړولو نقشه ده. Object د Class یوه حقیقي بېلګه ده. Class Fields د حالت او Methods د چلند استازیتوب کوي.` ,
+`class Student {
+    String name;
+    int age;
+
+    void show() {
+        System.out.println(name);
+        System.out.println(age);
+    }
+}
+
+Student s = new Student();
+s.name = "Ahmad";
+s.age = 20;
+s.show();`,
+`Ahmad
+20`],
+["د OOP څلور بنسټیز مفاهیم",
+`Encapsulation د معلوماتو او Methods یوځای تنظیمول او د لاسرسي کنټرول دی.
+Inheritance د یوه Class له بل Class څخه د غړو د میراث اخیستلو لاره ده.
+Polymorphism د یوه Interface یا Parent Type له لارې د بېلابېلو بڼو د چلند امکان دی.
+Abstraction د غیرضروري جزئیاتو پټول او د اړینو ځانګړنو ښودل دي.`],
+["Object جوړول او Reference",
+`new د Object د جوړولو لپاره کارول کېږي. Variable اکثره د Object Reference ساتي. که دوه Referenceونه یوه Object ته اشاره وکړي، د یوه Reference له لارې د Object د حالت بدلول د بل له لارې هم لیدل کېږي.` ,
+`Student a = new Student();
+a.name = "Ali";
+Student b = a;
+b.name = "Ahmad";
+System.out.println(a.name);`,
+`Ahmad`],
+["this Keyword",
+`this د روان Object ته اشاره کوي. دا د Instance Variable او Parameter د نومونو د توپیر، د بل Constructor د غږولو او د روان Object د Reference د ورکولو لپاره کارېدای شي.` ,
+`class Student {
+    String name;
+
+    Student(String name) {
+        this.name = name;
+    }
+}
+Student s = new Student("Sara");
+System.out.println(s.name);`,
+`Sara`]
+]},
+{
+title:"۱۳ ـ Constructors",
+intro:"Constructor د Object د جوړېدو پر مهال د هغه د لومړني حالت د تنظیم لپاره ځانګړی جوړښت دی.",
+sections:[
+["Constructor تعریف",
+`Constructor د Class نوم لري او Return Type نه لري. د Object د جوړولو پر مهال اجرا کېږي. که هېڅ Constructor ونه لیکل شي، Compiler د شرایطو له مخې Default Constructor برابروي.` ,
+`class Student {
+    String name;
+
+    Student() {
+        name = "Unknown";
+    }
+}
+Student s = new Student();
+System.out.println(s.name);`,
+`Unknown`],
+["No-Argument او Parameterized Constructor",
+`No-Argument Constructor هېڅ Parameter نه لري.
+Parameterized Constructor یو یا څو Parameterونه اخلي او د Object د لومړني ارزښتونو د ټاکلو لپاره کارول کېږي.` ,
+`class Student {
+    String name;
+    int age;
+
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+Student s = new Student("Ahmad", 20);
+System.out.println(s.name);
+System.out.println(s.age);`,
+`Ahmad
+20`],
+["Constructor Overloading",
+`په یوه Class کې څو Constructors لرلای شو، په دې شرط چې د Parameterونو لېستونه توپیر ولري.` ,
+`class Box {
+    int width;
+
+    Box() {
+        width = 1;
+    }
+
+    Box(int width) {
+        this.width = width;
+    }
+}
+System.out.println(new Box().width);
+System.out.println(new Box(5).width);`,
+`1
+5`],
+["this() او super()",
+`this() د هماغه Class بل Constructor غږوي؛ super() د Parent Class Constructor غږوي. کله چې وکارول شي، د Constructor لومړۍ Statement باید وي. په یوه Constructor کې دواړه په مستقیم ډول د لومړۍ Statement په توګه نه شي راتلای.`],
+["Constructor د Inheritance په برخه کې",
+`Constructors د عادي Methods په څېر Inherited نه کېږي. خو د Subclass د Object د جوړېدو پر مهال د Parent Class د Constructor اجرا کېدل د Parent برخې د تنظیم لپاره مهم دي. که مناسب Constructor په اتومات ډول نه شي غږېدای، د super(...) په وسیله یې په څرګند ډول غږول کېږي.`]
+]},
+{
+title:"۱۴ ـ Encapsulation او Access Modifiers",
+intro:"Encapsulation د معلوماتو او اړوندو Methods یوځای کول او د لاسرسي کنټرول دی. دا د Object د حالت د خوندي او منظم ساتلو لپاره کارېږي.",
+sections:[
+["Private Variables",
+`private Field یوازې د هماغه Class دننه مستقیم لاسرسی لري. نور Classونه کولای شي د Public Methods له لارې کنټرول شوی لاسرسی ترلاسه کړي. د هر Field لپاره Getter او Setter لازمي نه دي؛ د اړتیا له مخې باید لاسرسی ورکړل شي.` ,
+`class Student {
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        if (age >= 0) {
+            this.age = age;
+        }
+    }
+}
+
+Student s = new Student();
+s.setAge(20);
+System.out.println(s.getAge());`,
+`20`],
+["Getter او Setter",
+`Getter عموماً د Field ارزښت بېرته ورکوي، لکه getAge().
+Setter عموماً ارزښت ټاکي یا بدلوي، لکه setAge(int age).
+د Setter دننه Validation هم کېدای شي، څو ناسم ارزښت ونه منل شي.`],
+["Access Modifiers",
+`public: له هغو ځایونو څخه د لاسرسي اجازه ورکوي چې د Java د نورو لاسرسي قواعدو له مخې لاسرسی ممکن وي.
+protected: په هماغه Package او د Subclass له قواعدو سره سم د لاسرسي اجازه ورکوي.
+default یا package-private: که Access Modifier ونه لیکل شي، لاسرسی د هماغه Package پورې محدود وي.
+private: یوازې په هماغه Class کې مستقیم لاسرسی لري.`],
+["Encapsulation ګټې",
+`د معلوماتو د ناسم بدلون مخه نیسي، د Class داخلي جوړښت پټوي، Validation ته لاره برابروي او د راتلونکو بدلونونو پر مهال د نورو Classونو د اغېز کمولو کې مرسته کوي.`]
+]},
+{
+title:"۱۵ ـ Inheritance",
+intro:"Inheritance هغه ځانګړنه ده چې Subclass د Superclass ځینې غړي د لاسرسي د قواعدو له مخې ترلاسه کوي او خپل نوي غړي هم ورزیاتولای شي.",
+sections:[
+["د Inheritance بنسټ",
+`extends د Classونو ترمنځ د Inheritance لپاره کارول کېږي. Subclass د Parent Class د لاسرسي وړ Fields او Methods کارولای شي، خو private غړو ته مستقیم لاسرسی نه لري. Constructors نه Inherited کېږي.` ,
+`class Animal {
+    void eat() {
+        System.out.println("Eating");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Barking");
+    }
+}
+
+Dog d = new Dog();
+d.eat();
+d.bark();`,
+`Eating
+Barking`],
+["د Inheritance ډولونه",
+`Single Inheritance: یو Child Class له یوه Parent Class څخه میراث اخلي.
+Multilevel Inheritance: یو Class له بل څخه او درېیم له دویم څخه میراث اخلي.
+Hierarchical Inheritance: څو Child Classونه له یوه Parent Class څخه میراث اخلي.
+Multiple Inheritance د څو Classونو څخه مستقیم Class Inheritance په Java کې د Classونو لپاره نه ملاتړ کېږي.
+Hybrid Inheritance د څو ډولونو ترکیب دی؛ په Java کې ځینې ترکیبونه د Interfaceونو په وسیله ممکن دي.`],
+["Single Inheritance",
+`په Single Inheritance کې یو Child Class یوازې یو Parent Class لري.` ,
+`class Person {
+    void speak() {
+        System.out.println("Speaking");
+    }
+}
+class Student extends Person {
+    void study() {
+        System.out.println("Studying");
+    }
+}`,
+`Student Object د speak() او study() دواړه Methods کارولای شي.`],
+["Multilevel Inheritance",
+`په Multilevel Inheritance کې میراث څو پوړونه لري.` ,
+`class Animal {
+    void eat() {
+        System.out.println("Eating");
+    }
+}
+class Mammal extends Animal {
+    void walk() {
+        System.out.println("Walking");
+    }
+}
+class Dog extends Mammal {
+    void bark() {
+        System.out.println("Barking");
+    }
+}`,
+`Dog د لاسرسي وړ eat()، walk() او bark() Methods کارولای شي.`],
+["Hierarchical Inheritance",
+`په Hierarchical Inheritance کې څو Subclassونه له یوه Parent Class څخه میراث اخلي.` ,
+`class Animal {
+    void eat() {
+        System.out.println("Eating");
+    }
+}
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Barking");
+    }
+}
+class Cat extends Animal {
+    void meow() {
+        System.out.println("Meowing");
+    }
+}`,
+`Dog او Cat دواړه eat() کارولای شي، خو د Dog خپل bark() او د Cat خپل meow() Method لري.`],
+["super Keyword",
+`super د Parent Class غړو ته د لاسرسي او د Parent Constructor د غږولو لپاره کارول کېږي. super.method() د Parent Method غږولای شي، او super(...) د Parent Constructor غږوي.` ,
+`class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        super.sound();
+        System.out.println("Dog barks");
+    }
+}
+new Dog().sound();`,
+`Animal sound
+Dog barks`],
+["د Inheritance محدودیتونه",
+`Java Class یوازې یو مستقیم Superclass لرلای شي، خو یو Class څو Interfaceونه Implement کولای شي. private غړي په Subclass کې مستقیم نه کارول کېږي؛ د لاسرسي وړ Public یا Protected Methods یې کارول کېدای شي. د Inheritance انتخاب باید د واقعي is-a اړیکې له مخې وشي.`]
+]},
+{
+title:"۱۶ ـ Polymorphism او Method Overriding",
+intro:"Polymorphism معنا لري چې یو مشترک Type د بېلابېلو Objectونو له لارې بېلابېل چلندونه وړاندې کړي.",
+sections:[
+["Method Overriding",
+`Method Overriding هغه وخت دی چې Subclass د Parent Class د Inherited Instance Method لپاره د هماغه لاسلیک سره خپل Implementation ولیکي. @Override Annotation د Compiler سره د قصد په څرګندولو کې مرسته کوي.` ,
+`class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+Animal a = new Dog();
+a.sound();`,
+`Dog barks`],
+["Dynamic Method Dispatch",
+`Dynamic Method Dispatch هغه بهیر دی چې Java د Runtime پر مهال د حقیقي Object د Class له مخې د Overridden Instance Method Implementation ټاکي. که Parent Class Reference د Child Class Object ته اشاره وکړي، د غږول شوي Overridden Method د اجرا ټاکنه د Object د حقیقي ډول له مخې کېږي.` ,
+`class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+class Cat extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Cat meows");
+    }
+}
+
+Animal a = new Dog();
+Animal b = new Cat();
+a.sound();
+b.sound();`,
+`Dog barks
+Cat meows`,
+`Animal a او Animal b د Parent Class Referenceونه دي، خو حقیقي Objectونه یې Dog او Cat دي. له همدې امله Java په Runtime کې د Object مطابق Overridden Method اجرا کوي.`],
+["Overloading او Overriding توپیر",
+`Overloading: یو نوم، خو د Parameterونو بېلابېل لېستونه؛ د Method انتخاب عموماً د Compile پر مهال د موجودو ډولونو له مخې کېږي.
+Overriding: د Parent Method په Subclass کې بیا تعریف؛ د Instance Method اجرا د حقیقي Object د Class له مخې په Runtime کې ټاکل کېږي.`],
+["Upcasting او Downcasting",
+`Upcasting د Child Object د Parent Type Reference ته سپارل دي او عموماً په اتومات ډول کېږي.
+Downcasting د Parent Reference د Child Type ته اړول دي او Explicit Cast غواړي. که Object د ټاکل شوي Child Type نه وي، ClassCastException رامنځته کېدای شي. instanceof د Cast له مخه د Type د ارزونې لپاره کارېدلی شي.` ,
+`Animal a = new Dog();
+if (a instanceof Dog) {
+    Dog d = (Dog) a;
+    d.sound();
+}`,
+`Dog barks`]
+]},
+{
+title:"۱۷ ـ Abstract Class او Interface",
+intro:"Abstract Class او Interface د Abstraction لپاره کارېږي، خو د جوړښت او استعمال له مخې توپیر لري.",
+sections:[
+["Abstract Class",
+`Abstract Class د abstract کلمې په وسیله اعلانېږي او مستقیم Object ترې نه جوړېږي. دا Abstract Methods او عادي Methods دواړه لرلای شي، Fields او Constructors هم لرلای شي.` ,
+`abstract class Shape {
+    abstract double area();
+
+    void describe() {
+        System.out.println("This is a shape");
+    }
+}
+class Circle extends Shape {
+    double radius = 2;
+
+    @Override
+    double area() {
+        return Math.PI * radius * radius;
+    }
+}
+Circle c = new Circle();
+System.out.println(c.area());`,
+`12.566370614359172`],
+["Interface",
+`Interface د یوه Type قرارداد تعریفوي. Class د implements په وسیله Interface عملي کوي. Interface Abstract Methods، ثابتونه او د Java د نسخې له مخې default، static او private Methods هم لرلای شي.` ,
+`interface Printable {
+    void print();
+}
+class Report implements Printable {
+    public void print() {
+        System.out.println("Printing report");
+    }
+}
+Printable p = new Report();
+p.print();`,
+`Printing report`],
+["Multiple Inheritance د Interface له لارې",
+`Java Class له څو Classونو څخه مستقیم Inheritance نه شي اخیستلای، خو څو Interfaceونه Implement کولای شي. دا کار د څو قراردادونو د پلي کولو امکان ورکوي. که Interfaceونه یو شان Default Methods ولري، Class ښايي اړ شي چې د ټکر حل په څرګند ډول وکړي.` ,
+`interface A {
+    void showA();
+}
+interface B {
+    void showB();
+}
+class Demo implements A, B {
+    public void showA() {
+        System.out.println("A");
+    }
+    public void showB() {
+        System.out.println("B");
+    }
+}
+Demo d = new Demo();
+d.showA();
+d.showB();`,
+`A
+B`],
+["Abstract Class او Interface توپیر",
+`Abstract Class د Class د ګډ حالت او چلند د شریکولو لپاره ګټور دی او Constructor لرلای شي. Interface د قرارداد او د بېلابېلو Classونو د ګډ Type لپاره ګټور دی. Class یوازې یو مستقیم Class Extend کوي، خو څو Interfaceونه Implement کولای شي.`]
+]},
+{
+title:"۱۸ ـ Exception Handling",
+intro:"Exception Handling د پروګرام د اجرا پر مهال د رامنځته کېدونکو ځینو ستونزو د نیولو او اداره کولو لاره ده، څو د خطا حالت په منظم ډول مدیریت شي.",
+sections:[
+["Exception څه شی دی؟",
+`Exception د اجرا پر مهال د غیرعادي حالت استازیتوب کوي. که پروګرام لس Statementونه ولري او په پنځم Statement کې نه‌اداره شوی Exception رامنځته شي، عادي اجرا ښايي هماغلته ودریږي او ورپسې Statementونه اجرا نه شي. Exception Handling د try، catch او finally په وسیله د ځینو حالاتو د اداره کولو لاره برابروي. ټولې ستونزې په Catch کولو نه حل کېږي؛ علت باید هم وپېژندل شي.`],
+["د Exception ډولونه",
+`Checked Exceptions د Compiler له خوا د مدیریت یا اعلان غوښتنه کوي، لکه IOException.
+Unchecked Exceptions د RuntimeException فرعي ډولونه دي، لکه NullPointerException او ArithmeticException؛ د Compiler له خوا یې Catch کول لازمي نه دي.
+Error د جدي ستونزو لپاره دی، لکه ځینې د حافظې یا JVM اړوند حالتونه. عموماً Errorونه د عادي پروګرامي جریان د اداره کولو لپاره نه نیول کېږي.`],
+["try او catch",
+`try کې هغه کوډ لیکل کېږي چې Exception رامنځته کولای شي. catch د ټاکلي Exception د اداره کولو لپاره کارول کېږي. د څو Catch Blocks په صورت کې باید مشخص Exceptionونه د عمومي Parent Exception څخه مخکې راشي.` ,
+`try {
+    int result = 10 / 0;
+    System.out.println(result);
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero");
+}`,
+`Cannot divide by zero`],
+["finally",
+`finally Block د عادي حالتونو په ډېرو مواردو کې د try/catch وروسته اجرا کېږي، که Exception وي یا نه. دا د پاکولو د کارونو لپاره کارېدای شي؛ خو د JVM د ناڅاپي بندېدو په څېر شرایطو کې اجرا یې مطلق تضمین نه دی. د Resourceونو لپاره try-with-resources اکثره غوره دی.` ,
+`try {
+    System.out.println("Try block");
+} catch (Exception e) {
+    System.out.println("Error");
+} finally {
+    System.out.println("Finally block");
+}`,
+`Try block
+Finally block`],
+["throw او throws",
+`throw د Exception د رامنځته کولو لپاره کارول کېږي.
+throws د Method په اعلان کې هغه Exceptionونه ښيي چې Method یې ممکن پورته Caller ته ورکړي. دا دواړه بېلابېل هدفونه لري.` ,
+`static void checkAge(int age) {
+    if (age < 18) {
+        throw new IllegalArgumentException("Age too low");
+    }
+    System.out.println("Allowed");
+}
+
+checkAge(20);`,
+`Allowed`],
+["Custom Exception",
+`پروګرامر د اړتیا له مخې خپل Exception Class جوړولای شي. د Checked Exception لپاره معمولاً Exception Extend کېږي او د Unchecked Exception لپاره RuntimeException.` ,
+`class InvalidMarksException extends Exception {
+    InvalidMarksException(String message) {
+        super(message);
+    }
+}
+
+static void checkMarks(int marks)
+        throws InvalidMarksException {
+    if (marks < 0 || marks > 100) {
+        throw new InvalidMarksException("Invalid marks");
+    }
+}`,
+`د checkMarks(150) غږول InvalidMarksException رامنځته کوي؛ که یې Catch نه کړې، پروګرام ممکن عادي جریان پرېږدي.`],
+["NullPointerException",
+`NullPointerException هغه وخت رامنځته کېدای شي چې null Reference د Object په څېر وکارول شي، لکه د هغه Method غږول. د دې د مخنیوي لپاره د Reference د null کېدو امکان وارزوه او د Object د جوړېدو او انتقال منطق سم تنظیم کړه.` ,
+`String name = null;
+if (name != null) {
+    System.out.println(name.length());
+} else {
+    System.out.println("Name is missing");
+}`,
+`Name is missing`],
+["try-with-resources",
+`try-with-resources د هغو Resourceونو د بندولو لپاره کارېږي چې AutoCloseable یا Closeable Implement کوي، لکه ډېری File او Stream Resourceونه. دا د Resource د هېرېدو خطر کموي.` ,
+`try (java.io.BufferedReader reader =
+         new java.io.BufferedReader(
+             new java.io.StringReader("Hello"))) {
+    System.out.println(reader.readLine());
+} catch (java.io.IOException e) {
+    System.out.println("Reading failed");
+}`,
+`Hello`]
+]},
+{
+title:"۱۹ ـ Wrapper Classes او Generics",
+intro:"Wrapper Classes د Primitive Types لپاره Object بڼه برابروي. Generics د Type Safety او د بیا کارېدونکي کوډ لپاره کارول کېږي.",
+sections:[
+["Wrapper Classes",
+`Integer د int، Double د double، Character د char او Boolean د boolean Wrapper Class دی. Wrapper Objects په Collections کې مهم دي، ځکه عادي Java Collections Primitive Values مستقیم نه ساتي.` ,
+`int number = 10;
+Integer objectNumber = number; // Autoboxing
+int other = objectNumber;      // Unboxing
+System.out.println(other);`,
+`10`],
+["Autoboxing او Unboxing",
+`Autoboxing د Primitive ارزښت Wrapper Object ته اړوي؛ Unboxing د Wrapper ارزښت Primitive ته اړوي. که Wrapper Reference null وي او Unboxing وشي، NullPointerException رامنځته کېدای شي.`],
+["Generics",
+`Generics د Class یا Method لپاره د Type Parameter ټاکلو اجازه ورکوي. دا د ناسم ډول د ارزښتونو د کارولو مخه د Compile پر مهال تر ډېره نیسي او د Explicit Casting اړتیا کموي.` ,
+`class Box<T> {
+    private T value;
+
+    void set(T value) {
+        this.value = value;
+    }
+
+    T get() {
+        return value;
+    }
+}
+
+Box<String> box = new Box<>();
+box.set("Java");
+System.out.println(box.get());`,
+`Java`],
+["Generic Method او محدودیتونه",
+`Generic Method خپل Type Parameter لري. د <T extends Number> په څېر محدودیت Type Parameter ته د ټاکلي Parent Type یا Interface د فرعي ډولونو اجازه ورکوي. Java Generics عموماً Type Erasure کاروي؛ له همدې امله د Primitive Type پر ځای Wrapper کارول کېږي.` ,
+`static <T> void show(T value) {
+    System.out.println(value);
+}
+show("Hello");
+show(100);`,
+`Hello
+100`]
+]},
+{
+title:"۲۰ ـ Collections Framework",
+intro:"Collections Framework د څو Objects د تنظیم، ساتلو، لټون او بدلون لپاره Interfaceونه او Classونه وړاندې کوي.",
+sections:[
+["List او ArrayList",
+`List د ترتیب لرونکو عناصرو لپاره Interface دی او تکراري عناصر منلای شي. ArrayList د List عام Implementation دی او د Index له لارې لاسرسی لري.` ,
+`import java.util.ArrayList;
+import java.util.List;
+
+List<String> names = new ArrayList<>();
+names.add("Ali");
+names.add("Sara");
+names.add("Ali");
+System.out.println(names);
+System.out.println(names.get(1));`,
+`[Ali, Sara, Ali]
+Sara`],
+["Set او HashSet",
+`Set د تکراري برابر عناصرو د ساتلو مخه نیسي. HashSet د ترتیب تضمین نه کوي؛ که د ترتیب ځانګړې اړتیا وي، نور Set Implementationونه وارزوه.` ,
+`import java.util.HashSet;
+import java.util.Set;
+
+Set<Integer> nums = new HashSet<>();
+nums.add(5);
+nums.add(5);
+nums.add(8);
+System.out.println(nums.contains(8));
+System.out.println(nums.size());`,
+`true
+2`],
+["Map او HashMap",
+`Map د Key او Value جوړه ساتي. Keys باید ځانګړې وي؛ د هماغه Key لپاره نوی ارزښت ټاکل پخوانی Value بدلوي. HashMap د ترتیب تضمین نه کوي.` ,
+`import java.util.HashMap;
+import java.util.Map;
+
+Map<String, Integer> marks = new HashMap<>();
+marks.put("Ali", 90);
+marks.put("Sara", 85);
+System.out.println(marks.get("Ali"));
+System.out.println(marks.containsKey("Sara"));`,
+`90
+true`],
+["Queue او Deque",
+`Queue د عناصرو د پروسس لپاره جوړښت دی او ډېری وخت د First-In-First-Out منطق لري. Deque له دواړو پایونو څخه د اضافه کولو او لرې کولو اجازه ورکوي. د عملي اړتیا له مخې مناسب Implementation غوره کېږي.` ,
+`import java.util.ArrayDeque;
+import java.util.Queue;
+
+Queue<String> queue = new ArrayDeque<>();
+queue.offer("A");
+queue.offer("B");
+System.out.println(queue.poll());
+System.out.println(queue.peek());`,
+`A
+B`],
+["Collections Utility",
+`java.util.Collections د مرتبولو، Reverse کولو، Shuffle او نورو عملیاتو لپاره Static Methods لري. Arrays او Collections دواړه د ډاټا د تنظیم لپاره ګټور Utility Tools لري.` ,
+`import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+List<Integer> values = new ArrayList<>(
+    List.of(5, 2, 8)
+);
+Collections.sort(values);
+System.out.println(values);`,
+`[2, 5, 8]`]
+]},
+{
+title:"۲۱ ـ Packages او Imports",
+intro:"Package د اړوندو Classونو او Interfaceونو د تنظیم لپاره نومي جوړښت دی. Import د بل Package د Type کارول اسانه کوي.",
+sections:[
+["Package اعلان",
+`package Statement عموماً د Java سرچینې فایل په پیل کې راځي. د Package نوم او د فولډر جوړښت باید د پروژې له تنظیم سره برابر وي.` ,
+`package school.student;
+
+public class Student {
+    public void show() {
+        System.out.println("Student");
+    }
+}`,
+`دا Class د school.student Package برخه ده.`],
+["Import",
+`import د بل Package Class ته د ساده نوم له لارې د لاسرسي اجازه ورکوي، که د لاسرسي قواعد یې اجازه ورکړي. د java.lang ډېری Classونه په اتومات ډول Import کېږي.` ,
+`import java.util.Scanner;
+import java.util.ArrayList;`,
+`Scanner او ArrayList د اړوندو Packageونو له Import وروسته په ساده نوم کارول کېدای شي.`],
+["Access او Packages",
+`Package-private غړي یوازې د هماغه Package دننه لاسرسی لري. public غړي د نورو Packageونو څخه هم د لاسرسي وړ کېدای شي. protected د Package او Subclass ځانګړي قواعد لري؛ private یوازې په هماغه Class کې مستقیم لاسرسی لري.`],
+["د NetBeans Package نوم",
+`که Package نوم school.student وي، عموماً د سرچینې فولډر جوړښت به school/student وي. د Class په سر کې package school.student; لیکل کېږي. د Package نوم کې نقطه د Package د برخو بېلوالی ښيي، نه دا چې نوم باید د نقطې پرته ولیکل شي.`]
+]},
+{
+title:"۲۲ ـ File Handling",
+intro:"File Handling د فایلونو د لوستلو، لیکلو او د معلوماتو د ساتلو لپاره کارول کېږي.",
+sections:[
+["د فایل لیکل",
+`د فایل د لیکلو لپاره Files او Path د java.nio.file Package څخه کارول کېدای شي. د فایل د جوړولو او لیکلو عملیات ممکن IOException رامنځته کړي.` ,
+`import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
 
 try {
-    const savedStudents = localStorage.getItem("studentMarksRecords");
-    students = savedStudents ? JSON.parse(savedStudents) : [];
-    if (!Array.isArray(students)) students = [];
-} catch (error) {
-    students = [];
+    Files.writeString(
+        Path.of("notes.txt"),
+        "Hello Java"
+    );
+    System.out.println("File written");
+} catch (IOException e) {
+    System.out.println("Write failed");
+}`,
+`File written`],
+["د فایل لوستل",
+`Files.readString() د کوچنیو متن فایلونو د لوستلو لپاره ساده لاره ده. د لویو فایلونو لپاره Streaming یا Buffered Reading مناسب کېدای شي.` ,
+`import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
+
+try {
+    String content =
+        Files.readString(Path.of("notes.txt"));
+    System.out.println(content);
+} catch (IOException e) {
+    System.out.println("Read failed");
+}`,
+`Hello Java`],
+["File، Path او Directory",
+`Path د فایل یا Directory مسیر استازیتوب کوي. Files د فایلونو د جوړولو، کاپي، حذف، لوستلو او لیکلو لپاره Static Methods لري. Relative Path د پروګرام د کاري Directory له مخې تفسیرېږي؛ نو د فایل موقعیت باید وکتل شي.`],
+["Serialization",
+`Serialization د Object حالت په Byte Stream کې د ساتلو لاره ده، خو د نامعلومو یا بې‌باوره سرچینو Serialization/Deserialization امنیتي خطرونه لرلای شي. د نویو پروژو لپاره اکثره JSON یا نور روښانه Data Formats مناسب وي؛ د Java Native Serialization باید په احتیاط وکارول شي.`]
+]},
+{
+title:"۲۳ ـ Enum، Math او Date/Time",
+intro:"Java د ثابتو نومونو، ریاضي عملیاتو او د نېټې او وخت د مدیریت لپاره ځانګړي ډولونه او کتابتونونه لري.",
+sections:[
+["Enum",
+`enum د ثابتو نومول شویو ارزښتونو مجموعه ده. د محدودو انتخابونو لپاره له عادي String څخه ډېر Type-Safe انتخاب کېدای شي.` ,
+`enum Day {
+    MONDAY, TUESDAY, WEDNESDAY
+}
+Day today = Day.MONDAY;
+System.out.println(today);`,
+`MONDAY`],
+["Math Class",
+`Math د abs، max، min، sqrt، pow، round او نورو ریاضي عملیاتو Static Methods لري. د Double ځینې محاسبې د Floating-Point د طبیعت له امله د عادي decimal تمې سره بشپړ برابر نه وي.` ,
+`System.out.println(Math.max(10, 20));
+System.out.println(Math.sqrt(25));
+System.out.println(Math.pow(2, 3));`,
+`20
+5.0
+8.0`],
+["Random عددونه",
+`د Random عددونو لپاره java.util.Random یا د ځانګړو اړتیاوو له مخې نور APIونه کارول کېږي. د امنیتي Tokenونو او Passwordونو لپاره عادي Random مناسب نه دی؛ SecureRandom باید وارزول شي.` ,
+`import java.util.Random;
+
+Random random = new Random(1);
+System.out.println(random.nextInt(10));`,
+`د Seed له امله د دې مثال پایله تکرارېدونکې ده؛ د بېلابېلو Seedونو پایلې بدلېدای شي.`],
+["Date او Time API",
+`java.time د نېټې او وخت د کار لپاره معیاري API دی. LocalDate د نېټې، LocalTime د وخت او LocalDateTime د دواړو لپاره کارول کېږي. د Time Zone لپاره ZonedDateTime مهم دی.` ,
+`import java.time.LocalDate;
+
+LocalDate date = LocalDate.of(2026, 1, 15);
+System.out.println(date);
+System.out.println(date.getYear());`,
+`2026-01-15
+2026`]
+]},
+{
+title:"۲۴ ـ Lambda او Functional Interfaces",
+intro:"Lambda Expression د Function په څېر چلند په لنډه بڼه څرګندوي. Functional Interface یوازې یو Abstract Method لري.",
+sections:[
+["Functional Interface",
+`Functional Interface یو Abstract Method لري؛ البته د Object او Interface د نورو ځانګړو قواعدو اړوند Methods او Default/Static Methods هم لرلای شي. @FunctionalInterface د دې قصد د Compiler له خوا د ارزونې لپاره کارول کېږي.` ,
+`@FunctionalInterface
+interface Greeting {
+    void sayHello();
 }
 
-let editingId = null;
+Greeting g = () -> System.out.println("Hello");
+g.sayHello();`,
+`Hello`],
+["Lambda Expression",
+`Lambda Expression د Functional Interface د Abstract Method لپاره Implementation وړاندې کوي. دا د Collection عملیاتو، Event Handling او Functional Programming کې کارېږي.` ,
+`java.util.List<String> names =
+    java.util.List.of("Ali", "Sara", "Ahmad");
 
-function showMessage(text, type) {
-    message.textContent = text;
-    message.className = "message " + type;
+names.forEach(name -> System.out.println(name));`,
+`Ali
+Sara
+Ahmad`],
+["Method Reference",
+`Method Reference د موجود Method یا Constructor ته لنډه اشاره ده. د بېلګې په توګه System.out::println د x -> System.out.println(x) پر ځای کارېدای شي.` ,
+`java.util.List<String> names =
+    java.util.List.of("Ali", "Sara");
 
-    setTimeout(() => {
-        message.textContent = "";
-        message.className = "message";
-    }, 3500);
-}
+names.forEach(System.out::println);`,
+`Ali
+Sara`],
+["Predicate، Function او Consumer",
+`Predicate<T> یو ارزښت اخلي او boolean بېرته ورکوي.
+Function<T,R> یو ارزښت اخلي او د بل ډول ارزښت بېرته ورکوي.
+Consumer<T> یو ارزښت اخلي، خو عادي Return Value نه لري.
+Supplier<T> د ټاکلي ډول ارزښت برابروي، پرته له دې چې Argument واخلي.`]
+]},
+{
+title:"۲۵ ـ Stream API",
+intro:"Stream API د Collections د معلوماتو د Filter، Transform او Aggregate کولو لپاره د عملیاتو لړۍ برابروي.",
+sections:[
+["Filter او Map",
+`filter د شرط مطابق عناصر ساتي. map هر عنصر په بل ارزښت بدلوي. Stream عملیات اکثره Lazy وي، یعنې تر Terminal Operation پورې بشپړ اجرا نه کېږي.` ,
+`import java.util.List;
 
-function saveStudents() {
-    try {
-        localStorage.setItem("studentMarksRecords", JSON.stringify(students));
-        return true;
-    } catch (error) {
-        showMessage("Unable to save data. Browser storage may be full or disabled.", "error");
-        return false;
+List<Integer> nums = List.of(1, 2, 3, 4, 5);
+
+nums.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * 10)
+    .forEach(System.out::println);`,
+`20
+40`],
+["reduce او count",
+`count د عناصرو شمېر ورکوي. reduce عناصر په یوه پایله راټولوي، لکه Sum. د Primitive عددونو لپاره mapToInt او sum هم کارول کېدای شي.` ,
+`int sum = List.of(1, 2, 3, 4)
+    .stream()
+    .mapToInt(Integer::intValue)
+    .sum();
+
+System.out.println(sum);`,
+`10`],
+["Stream احتیاطونه",
+`Stream عموماً یوازې یو ځل کارول کېږي. د یوه Stream بیا کارول ممکن IllegalStateException رامنځته کړي. د Stream په منځنیو عملیاتو کې د بهرني حالت بدلول د کوډ لوستل او وړاندوینه ستونزمنولای شي؛ پاک او ساده عملیات غوره دي.`]
+]},
+{
+title:"۲۶ ـ Multithreading",
+intro:"Multithreading د یوه پروګرام دننه د څو Threadونو د اجرا لپاره کارول کېږي. Thread د اجرا خپل مسیر لري.",
+sections:[
+["Thread څه شی دی؟",
+`Thread د اجرا یو مسیر دی. د څو Threadونو په وسیله ځینې کارونه په موازي یا هم‌مهاله ډول پرمخ تللای شي، خو د واقعي Parallelism اندازه د سیستم، CPU او د اجرا چاپېریال پورې تړلې ده.` ,
+`class Task extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Task running");
     }
 }
 
-function getFormData() {
-    const marks = {};
+Task t = new Task();
+t.start();`,
+`Task running`],
+["Runnable",
+`Runnable د کار د تعریف لپاره Interface دی. Thread د اجرا د مسیر د مدیریت لپاره کارېږي. start() نوی Thread پیلوي؛ د run() مستقیم غږول یوازې عادي Method غږوي.` ,
+`Runnable task = () ->
+    System.out.println("Runnable task");
 
-    subjectIds.forEach(id => {
-        marks[id] = Number(document.getElementById(id).value);
-    });
+Thread t = new Thread(task);
+t.start();`,
+`Runnable task`],
+["Synchronization",
+`کله چې څو Threadونه ګډ Mutable Data بدلوي، Race Condition رامنځته کېدای شي. synchronized د ټاکلي Monitor پر بنسټ د لاسرسي همغږي کولو لپاره کارېږي؛ د ډیزاین له مخې نور Concurrency Tools هم شته.` ,
+`class Counter {
+    private int count = 0;
 
-    const total = subjectIds.reduce((sum, id) => sum + marks[id], 0);
-    const average = total / subjectIds.length;
-    const passed = subjectIds.every(id => marks[id] >= 40);
+    synchronized void increment() {
+        count++;
+    }
 
-    return {
-        name: document.getElementById("studentName").value.trim(),
-        father: document.getElementById("fatherName").value.trim(),
-        studentId: document.getElementById("studentId").value.trim(),
-        className: document.getElementById("className").value.trim(),
-        marks,
-        total,
-        average,
-        result: passed ? "Pass" : "Fail"
+    synchronized int getCount() {
+        return count;
+    }
+}`,
+`د increment() او getCount() همغږي شوی لاسرسی د count د ګډ بدلون د خوندي کولو لپاره مرسته کوي.`],
+["ExecutorService او Thread Safety",
+`ExecutorService د Threadونو د مدیریت لپاره د Thread Pool په څېر وسایل برابروي. په عملي پروګرامونو کې د Thread جوړول، بندول، د پایلو ترلاسه کول او د Exceptionونو اداره کول باید په منظم ډول ترسره شي. د ګډو معلوماتو لپاره Concurrent Collections، Locks او Atomic Types هم مهم دي.`]
+]},
+{
+title:"۲۷ ـ JDBC او Database",
+intro:"JDBC د Java پروګرام او Relational Database ترمنځ د اړیکې معیاري API دی.",
+sections:[
+["JDBC بنسټ",
+`د JDBC په وسیله Connection جوړېږي، SQL Statement اجرا کېږي او پایلې لوستل کېږي. د کارولو لپاره مناسب Database Driver اړین دی. د Connection معلومات باید د پروژې له چاپېریال سره سم تنظیم شي.`],
+["PreparedStatement",
+`PreparedStatement د Parameter لرونکو SQL پوښتنو لپاره کارول کېږي. دا د SQL Injection د خطر په کمولو کې مرسته کوي، که ارزښتونه په سمه توګه د Parameterونو له لارې ورکړل شي.` ,
+`String sql = "SELECT name FROM students WHERE id = ?";
+try (java.sql.Connection con =
+         java.sql.DriverManager.getConnection(
+             "jdbc:your_database_url",
+             "your_user",
+             "your_password");
+     java.sql.PreparedStatement ps =
+         con.prepareStatement(sql)) {
+
+    ps.setInt(1, 1);
+
+    try (java.sql.ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            System.out.println(rs.getString("name"));
+        }
+    }
+} catch (java.sql.SQLException e) {
+    System.out.println("Database error");
+}`,
+`دا کوډ د نمونې Connection URL، Username او Password غواړي. د حقیقي Database له Driver او تنظیماتو پرته به مستقیم کار ونه کړي.`],
+["CRUD",
+`CRUD څلور اساسي عملیات دي:
+Create: نوي معلومات زیاتول.
+Read: معلومات لوستل.
+Update: معلومات بدلول.
+Delete: معلومات حذف کول.
+د Database بدلونونه باید د Transaction، Validation او د لاسرسي د امنیت له اصولو سره سم اداره شي.`],
+["Transactions",
+`Transaction د څو Database عملیاتو مجموعه ده چې د یوه واحد کار په توګه اداره کېږي. Commit بدلونونه تاییدوي او Rollback د نه‌تایید شوو بدلونونو د بېرته ګرځولو لپاره کارول کېږي. د Transaction د حدودو ټاکل د معلوماتو د ثبات لپاره مهم دي.`]
+]},
+{
+title:"۲۸ ـ Networking",
+intro:"Java Networking API د شبکې له لارې د معلوماتو د لېږلو او ترلاسه کولو وسایل برابروي.",
+sections:[
+["URL او HTTP",
+`د ویب‌خدمتونو لپاره Java د HTTP Client API لري. د غوښتنې Method، Headers، Timeout او Response Status باید د خدمت د اړتیا له مخې تنظیم شي.` ,
+`java.net.http.HttpClient client =
+    java.net.http.HttpClient.newHttpClient();
+
+java.net.http.HttpRequest request =
+    java.net.http.HttpRequest.newBuilder()
+        .uri(java.net.URI.create("https://example.com"))
+        .GET()
+        .build();
+
+try {
+    java.net.http.HttpResponse<String> response =
+        client.send(
+            request,
+            java.net.http.HttpResponse.BodyHandlers.ofString()
+        );
+    System.out.println(response.statusCode());
+} catch (Exception e) {
+    System.out.println("Request failed");
+}`,
+`د مثال د اجرا پایله د ویب‌پاڼې او شبکې له وضعیت سره تړلې ده؛ د Status Code ارزښت ثابت نه دی.`],
+["Socket",
+`Socket د Client او Server ترمنځ د شبکې د اړیکې لپاره کارېدای شي. د Socketونو په کارولو کې د Connection Timeout، Resource Cleanup، د پیغامونو بڼه او امنیت مهم دي.`],
+["Networking امنیت",
+`د شبکې د اړیکو لپاره HTTPS او د Certificate د اعتبار ارزونه مهم دي. حساس Passwordونه او API Keys باید په سرچینه کوډ کې ښکاره ونه ساتل شي. د نامعلومو شبکيزو معلوماتو اعتبار باید وارزول شي.`]
+]},
+{
+title:"۲۹ ـ GUI او Swing",
+intro:"GUI د Graphical User Interface لنډ نوم دی. Swing د Desktop Interface جوړولو لپاره د Java یو کتابتون دی.",
+sections:[
+["JFrame او JButton",
+`JFrame د کړکۍ لپاره کارول کېږي او JButton د تڼۍ لپاره. د Swing ډېری UI عملیات باید د Event Dispatch Thread په وسیله ترسره شي.` ,
+`import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+SwingUtilities.invokeLater(() -> {
+    JFrame frame = new JFrame("Java App");
+    JButton button = new JButton("Click Me");
+
+    button.addActionListener(e ->
+        button.setText("Clicked")
+    );
+
+    frame.add(button);
+    frame.setSize(300, 200);
+    frame.setDefaultCloseOperation(
+        JFrame.EXIT_ON_CLOSE
+    );
+    frame.setLocationRelativeTo(null);
+    frame.setVisible(true);
+});`,
+`یوه کړکۍ به ښکاره شي. د تڼۍ له کېکاږلو سره د هغې متن Clicked ته بدلېږي.`],
+["Event Handling",
+`Event هغه پېښه ده چې د کارونکي یا سیستم له کړنې رامنځته کېږي. ActionListener د تڼۍ د کلیک په څېر پېښو ته ځواب ورکوي. د UI اوږده کارونه باید د UI Thread بند نه کړي.`],
+["Layouts",
+`Layout Manager د UI عناصرو ځای او اندازه تنظیموي. BorderLayout، FlowLayout او GridLayout د Swing مشهور Layout Managerونه دي. د ثابتو مختصاتو پر ځای Layoutونه د بېلابېلو کړکیو او سکرینونو لپاره د مناسب تنظیم مرسته کوي.`]
+]},
+{
+title:"۳۰ ـ Debugging، Testing او Documentation",
+intro:"Debugging د خطا موندلو او اصلاح کولو بهیر دی. Testing د پروګرام د چلند ارزونه کوي او Documentation د کوډ د پوهېدو لپاره معلومات وړاندې کوي.",
+sections:[
+["Compile-Time او Runtime Errors",
+`Compile-Time Error د کوډ د ژبې یا Type قواعدو د ماتېدو له امله د Compiler له خوا ښودل کېږي.
+Runtime Error د پروګرام د اجرا پر مهال رامنځته کېږي.
+Logical Error هغه وخت وي چې پروګرام اجرا شي، خو پایله یې د تمې خلاف وي.`],
+["Debugging",
+`په IDE کې Breakpoint ټاکل کېږي، پروګرام اجرا کېږي او د متغیرونو ارزښتونه په Step-by-Step ډول کتل کېږي. د خطا د تکرار وړ مثال جوړول او د خطا د پیغام لوستل د Debugging مهمې برخې دي.`],
+["Unit Testing",
+`Unit Test د یوه کوچني واحد، لکه Method، چلند ازمويي. د Java په پروژه کې JUnit یو مشهور Testing Framework دی. Tests باید عادي حالتونه، حدود او د خطا حالتونه وازمويي.` ,
+`import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class CalculatorTest {
+    @Test
+    void addsTwoNumbers() {
+        assertEquals(5, 2 + 3);
+    }
+}`,
+`دا د JUnit 5 د Test مثال دی. د اجرا لپاره باید JUnit 5 د پروژې په Dependencies کې موجود وي.`],
+["JavaDoc",
+`JavaDoc د Class، Method او API د مستند کولو لپاره ځانګړې تبصرې کاروي. @param د Parameter، @return د Return Value او @throws د احتمالي Exception تشریح کوي.` ,
+`/**
+ * Adds two integers.
+ * @param a first number
+ * @param b second number
+ * @return sum of the numbers
+ */
+static int add(int a, int b) {
+    return a + b;
+}`,
+`دا تبصره د add Method د هدف، Parameterونو او Return Value تشریح کوي.`]
+]},
+{
+title:"۳۱ ـ Algorithms او Complexity",
+intro:"Algorithm د یوې ستونزې د حل لپاره د ګامونو منظم ترتیب دی. Complexity د وخت او حافظې د اړتیا د ودې د اندازې تشریح کوي.",
+sections:[
+["Linear Search",
+`Linear Search عناصر یو په بل پسې ګوري. که عنصر په پیل کې وي، ژر موندل کېږي؛ که په پای کې وي یا موجود نه وي، ښايي ټول عناصر وکتل شي.` ,
+`static int linearSearch(int[] a, int target) {
+    for (int i = 0; i < a.length; i++) {
+        if (a[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+System.out.println(
+    linearSearch(new int[]{4, 7, 9}, 7)
+);`,
+`1`,
+`د Linear Search د وخت Complexity په عمومي Worst Case کې O(n) ده.`],
+["Binary Search",
+`Binary Search پر مرتب شوي Array کې په هر ګام د لټون ساحه نږدې نیمایي کوي. د سم کار لپاره Array باید مرتب وي.` ,
+`static int binarySearch(int[] a, int target) {
+    int left = 0;
+    int right = a.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (a[mid] == target) return mid;
+        if (a[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}
+
+System.out.println(
+    binarySearch(new int[]{2, 4, 6, 8}, 6)
+);`,
+`2`,
+`د Binary Search د وخت Complexity O(log n) ده، خو د مرتب کولو شرط باید پوره وي.`],
+["Big O",
+`O(1) د ثابتې ودې، O(log n) د لوګاریتمي ودې، O(n) د خطي ودې او O(n²) د مربع‌يي ودې لپاره کارول کېږي. Big O د Input د اندازې په زیاتېدو د الگوریتم د سرچینو د اړتیا د ودې عمومي بڼه ښيي.`],
+["Sorting",
+`Sorting د معلوماتو د ترتیبولو بهیر دی. Bubble Sort د زده‌کړې لپاره ساده خو د لویو معلوماتو لپاره عموماً ورو دی. Merge Sort او Quick Sort د ډېرو عملي حالاتو لپاره مهم الگوریتمونه دي. د Java Arrays.sort() د Arrayونو د مرتبولو لپاره موجود Utility Method دی.`]
+]},
+{
+title:"۳۲ ـ نور مهم Java مفاهیم",
+intro:"په Java کې څو نور مفاهیم هم شته چې د واقعي پروژو او د کوډ د سمې لیکنې لپاره مهم دي.",
+sections:[
+["static Keyword",
+`static Field یا Method د Class پورې تړلی وي، نه د یوه ځانګړي Object پورې. Static Method عموماً د Object د Instance Field مستقیم کارولو ته اړتیا نه لري او د this Reference نه شي کارولای.` ,
+`class Counter {
+    static int count = 0;
+
+    Counter() {
+        count++;
+    }
+}
+new Counter();
+new Counter();
+System.out.println(Counter.count);`,
+`2`],
+["final Keyword",
+`final Variable یو ځل ارزښت اخلي. final Method په Subclass کې Override کېدای نه شي. final Class نه شي Extend کېدای. د final Reference معنا دا نه ده چې د هغه Object ټول داخلي ارزښتونه حتمي ثابت دي.`],
+["Object Class",
+`هر Java Class په مستقیم یا غیرمستقیم ډول له Object څخه میراث اخلي. toString() د Object د متني استازیتوب لپاره، equals() د برابرۍ لپاره او hashCode() د Hash-based جوړښتونو لپاره مهم Methods دي. که equals() Override شي، hashCode() هم باید د قرارداد له مخې مناسب Override شي.`],
+["Garbage Collection",
+`Garbage Collector د هغو Objectونو حافظه بېرته ازادوي چې نور د لاسرسي وړ Reference نه لري. پروګرامر عموماً په مستقیم ډول د حافظې د ازادولو دقیق وخت نه ټاکي. د فایلونو، Socketونو او نورو Resourceونو د بندولو لپاره باید مناسب Cleanup وکارول شي؛ یوازې Garbage Collection کافي نه دی.`],
+["Assertions",
+`assert د پروګرام د ځینو فرضیو د ارزونې لپاره کارول کېدای شي، خو د کارونکي د Input د اعتبار د لازمي کنټرول بدیل نه دی. Assertions باید د اجرا پر مهال فعال شي؛ له همدې امله د عام Validation لپاره if او Exceptionونه مناسب دي.`],
+["Annotations",
+`Annotations د کوډ په اړه اضافي معلومات برابروي. @Override د Method د Override قصد ښيي، @Deprecated د زړې شوې ځانګړنې خبر ورکوي او @SuppressWarnings د ځینو Compiler Warningونو د محدودولو لپاره کارېږي. Annotation په خپله د پروګرام د عادي Statement په څېر نه ده.`]
+]},
+{
+title:"۳۳ ـ د تمرینونو مجموعه",
+intro:"دا تمرینونه د Java د بنسټیزو مفاهیمو د عملي کولو لپاره دي. هڅه وکړه لومړی یې خپله حل کړې او بیا یې له خپل کوډ سره پرتله کړې.",
+sections:[
+["لومړی تمرین: د دوو عددونو جمع",
+`یو پروګرام ولیکه چې دوه int متغیرونه ولري او د دواړو جمع چاپ کړي. بیا یې داسې بدل کړه چې عددونه د Scanner له لارې واخلي.`],
+["دویم تمرین: د نمرې ارزونه",
+`د marks په نوم متغیر جوړ کړه. که نمره 50 یا زیاته وي Passed او که کمه وي Failed چاپ کړه. وروسته د else-if په وسیله څو درجې ورزیاتې کړه.`],
+["درېیم تمرین: د ۱ څخه تر ۱۰ پورې عددونه",
+`د for Loop په وسیله له 1 څخه تر 10 پورې عددونه چاپ کړه. بیا د ټولو عددونو جمع محاسبه کړه.`],
+["څلورم تمرین: Array",
+`د پنځو نمراتو Array جوړ کړه. د Loop په وسیله یې ټولې نمرې جمع کړه او اوسط یې محاسبه کړه. د Array د خالي کېدو امکان هم په پام کې ونیسه.`],
+["پنځم تمرین: Method Overloading",
+`د Calculator Class جوړ کړه چې add Method ولري: یو Method دوه int واخلي، بل درې int او درېیم دوه double واخلي. د هر Method پایله چاپ کړه.`],
+["شپږم تمرین: Inheritance",
+`Animal Parent Class جوړ کړه چې eat() Method ولري. Dog او Cat ترې Extend کړه او خپل sound() Methods ورته ولیکه. بیا د Parent Reference له لارې د Dog او Cat Objectونه وازمویه.`],
+["اووم تمرین: Encapsulation",
+`Student Class جوړ کړه چې private age ولري. Getter او Setter ورته ولیکه. Setter باید منفي عمر ونه مني.`],
+["اتم تمرین: Exception Handling",
+`د دوو عددونو د تقسیم پروګرام جوړ کړه. د صفر پر تقسیم د ArithmeticException حالت اداره کړه. د کارونکي Input هم وارزوه.`],
+["نهم تمرین: Collections",
+`ArrayList د څو نومونو لپاره جوړ کړه، یو نوم ورزیات کړه، یو نوم لرې کړه او د نومونو ټول لېست چاپ کړه.`],
+["لسم تمرین: وروستۍ پروژه",
+`د Student Management System ساده نسخه جوړه کړه. د زده‌کوونکو نومونه او نمرې وساته، نمرې محاسبه کړه، د لټون امکان ورکړه او د ناسم Input لپاره مناسبه خطا وښیه. وروسته د File Handling په وسیله معلومات فایل ته وساته.`]
+]}
+];
+
+let current = 0;
+const nav = document.getElementById("nav");
+const search = document.getElementById("search");
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  }[char]));
+}
+
+function renderNav(filter = "") {
+  nav.innerHTML = "";
+  lessons.forEach((lesson, index) => {
+    if (!lesson.title.toLowerCase().includes(filter.toLowerCase())) return;
+    const button = document.createElement("button");
+    button.className = "navitem" + (index === current ? " active" : "");
+    button.textContent = lesson.title;
+    button.onclick = () => {
+      current = index;
+      renderLesson();
+      renderNav(search.value);
+      window.scrollTo({top: 0, behavior: "smooth"});
     };
+    nav.appendChild(button);
+  });
 }
 
-function validateData(data) {
-    if (!data.name || !data.father || !data.studentId || !data.className) {
-        showMessage("Please fill in all student information.", "error");
-        return false;
+function renderLesson() {
+  const lesson = lessons[current];
+  document.getElementById("chapterNumber").textContent =
+    "فصل " + (current + 1) + " له " + lessons.length;
+  document.getElementById("lessonTitle").textContent = lesson.title;
+
+  let html = `<p class="intro">${escapeHtml(lesson.intro)}</p>`;
+
+  lesson.sections.forEach(section => {
+    html += `<h2 class="section-title">${escapeHtml(section[0])}</h2>`;
+    html += `<p>${escapeHtml(section[1]).replace(/\n/g, "<br>")}</p>`;
+
+    if (section[2]) {
+      html += `<div class="example">
+        <div class="example-head">د Java کوډ</div>
+        <pre><code>${escapeHtml(section[2])}</code></pre>`;
+
+      if (section[3]) {
+        html += `<div class="output-label">Output / پایله</div>
+                 <div class="output">${escapeHtml(section[3])}</div>`;
+      }
+      html += `</div>`;
     }
 
-    for (const id of subjectIds) {
-        const input = document.getElementById(id);
-        if (input.value.trim() === "" ||
-            !Number.isFinite(Number(input.value)) ||
-            Number(input.value) < 0 ||
-            Number(input.value) > 100) {
-            showMessage("Enter valid marks between 0 and 100 for every subject.", "error");
-            return false;
-        }
+    if (section[4]) {
+      html += `<div class="note">${escapeHtml(section[4])}</div>`;
     }
+  });
 
-    const duplicate = students.some(student =>
-        student.studentId.toLowerCase() === data.studentId.toLowerCase() &&
-        student.id !== editingId
-    );
-
-    if (duplicate) {
-        showMessage("This Student ID already exists.", "error");
-        return false;
-    }
-
-    return true;
+  document.getElementById("lesson").innerHTML = html;
+  document.getElementById("prev").disabled = current === 0;
+  document.getElementById("next").disabled = current === lessons.length - 1;
+  document.getElementById("progressFill").style.width =
+    (((current + 1) / lessons.length) * 100) + "%";
 }
 
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
+document.getElementById("prev").onclick = () => {
+  if (current > 0) {
+    current--;
+    renderLesson();
+    renderNav(search.value);
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+};
 
-    const data = getFormData();
-    if (!validateData(data)) return;
+document.getElementById("next").onclick = () => {
+  if (current < lessons.length - 1) {
+    current++;
+    renderLesson();
+    renderNav(search.value);
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+};
 
-    if (editingId !== null) {
-        const index = students.findIndex(student => student.id === editingId);
+search.addEventListener("input", () => renderNav(search.value));
 
-        if (index === -1) {
-            showMessage("Student record was not found.", "error");
-            return;
-        }
-
-        const oldStudent = students[index];
-        students[index] = { ...oldStudent, ...data };
-
-        if (!saveStudents()) {
-            students[index] = oldStudent;
-            return;
-        }
-
-        showMessage("Student record updated successfully.", "success-message");
-    } else {
-        const newStudent = {
-            id: Date.now().toString() + Math.random().toString(16).slice(2),
-            ...data
-        };
-
-        students.push(newStudent);
-
-        if (!saveStudents()) {
-            students.pop();
-            return;
-        }
-
-        showMessage("Student registered successfully.", "success-message");
-    }
-
-    resetForm();
-    renderStudents();
-});
-
-function resetForm() {
-    form.reset();
-    editingId = null;
-    document.getElementById("formTitle").textContent = "Student Registration";
-    document.getElementById("submitButton").textContent = "Register Student";
-    document.getElementById("cancelEdit").style.display = "none";
-}
-
-document.getElementById("resetButton").addEventListener("click", resetForm);
-
-document.getElementById("cancelEdit").addEventListener("click", function() {
-    resetForm();
-    showMessage("Editing cancelled.", "success-message");
-});
-
-function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[character]);
-}
-
-function renderStudents() {
-    const query = searchInput.value.trim().toLowerCase();
-
-    const filteredStudents = students.filter(student =>
-        student.name.toLowerCase().includes(query) ||
-        student.father.toLowerCase().includes(query) ||
-        student.studentId.toLowerCase().includes(query) ||
-        student.className.toLowerCase().includes(query)
-    );
-
-    document.getElementById("totalStudents").textContent = students.length;
-    document.getElementById("passedStudents").textContent =
-        students.filter(student => student.result === "Pass").length;
-    document.getElementById("failedStudents").textContent =
-        students.filter(student => student.result === "Fail").length;
-
-    if (filteredStudents.length === 0) {
-        studentTable.innerHTML = `
-            <tr><td colspan="9" class="empty">No student records found.</td></tr>
-        `;
-        return;
-    }
-
-    studentTable.innerHTML = filteredStudents.map((student, index) => `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${escapeHTML(student.studentId)}</td>
-            <td>${escapeHTML(student.name)}</td>
-            <td>${escapeHTML(student.father)}</td>
-            <td>${escapeHTML(student.className)}</td>
-            <td>${student.total}</td>
-            <td>${student.average.toFixed(2)}%</td>
-            <td class="${student.result === "Pass" ? "status-pass" : "status-fail"}">
-                ${student.result}
-            </td>
-            <td>
-                <div class="action-buttons">
-                    <button class="primary" data-action="edit" data-id="${student.id}">Edit</button>
-                    <button class="danger" data-action="delete" data-id="${student.id}">Delete</button>
-                </div>
-            </td>
-        </tr>
-    `).join("");
-}
-
-studentTable.addEventListener("click", function(event) {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
-
-    if (button.dataset.action === "edit") {
-        editStudent(button.dataset.id);
-    } else if (button.dataset.action === "delete") {
-        deleteStudent(button.dataset.id);
-    }
-});
-
-function editStudent(id) {
-    const student = students.find(item => item.id === id);
-
-    if (!student) {
-        showMessage("Student record was not found.", "error");
-        return;
-    }
-
-    editingId = id;
-
-    document.getElementById("studentName").value = student.name;
-    document.getElementById("fatherName").value = student.father;
-    document.getElementById("studentId").value = student.studentId;
-    document.getElementById("className").value = student.className;
-
-    subjectIds.forEach(subject => {
-        document.getElementById(subject).value = student.marks[subject];
-    });
-
-    document.getElementById("formTitle").textContent = "Edit Student Record";
-    document.getElementById("submitButton").textContent = "Update Student";
-    document.getElementById("cancelEdit").style.display = "inline-block";
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function deleteStudent(id) {
-    const student = students.find(item => item.id === id);
-
-    if (!student) {
-        showMessage("Student record was not found.", "error");
-        return;
-    }
-
-    if (!confirm("Are you sure you want to delete this student record?")) {
-        return;
-    }
-
-    const previousStudents = students.slice();
-    students = students.filter(item => item.id !== id);
-
-    if (!saveStudents()) {
-        students = previousStudents;
-        return;
-    }
-
-    if (editingId === id) resetForm();
-
-    renderStudents();
-    showMessage("Student record deleted successfully.", "success-message");
-}
-
-searchInput.addEventListener("input", renderStudents);
-
-document.getElementById("exportButton").addEventListener("click", function() {
-    if (students.length === 0) {
-        showMessage("There are no student records to export.", "error");
-        return;
-    }
-
-    const headers = [
-        "Student ID", "Student Name", "Father Name", "Class / Department",
-        "Computer Science", "Mathematics", "English", "Programming",
-        "Computer Networking", "Database", "Islamic Studies",
-        "Total", "Average", "Result"
-    ];
-
-    function csvCell(value) {
-        let text = String(value ?? "");
-        if (/^[=+\-@]/.test(text)) text = "'" + text;
-        return '"' + text.replace(/"/g, '""') + '"';
-    }
-
-    const rows = students.map(student => [
-        student.studentId,
-        student.name,
-        student.father,
-        student.className,
-        ...subjectIds.map(subject => student.marks[subject]),
-        student.total,
-        student.average.toFixed(2),
-        student.result
-    ]);
-
-    const csvContent = [headers, ...rows]
-        .map(row => row.map(csvCell).join(","))
-        .join("\r\n");
-
-    const blob = new Blob(["\uFEFF" + csvContent], {
-        type: "text/csv;charset=utf-8;"
-    });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = "student-marks-records.csv";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
-    showMessage("Student records exported successfully.", "success-message");
-});
-
-renderStudents();
+renderNav();
+renderLesson();
 </script>
 </body>
 </html>
